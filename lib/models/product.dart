@@ -1,7 +1,12 @@
 class Product {
-  final int id;
+  late int? id;
   final String name;
-  final String barcode;
+  late int? quantity;
+  late int? barcode;
 
-  Product({required this.id, required this.name, required this.barcode});
+  Product(
+      {required this.id,
+      required this.name,
+      required this.quantity,
+      required this.barcode});
 }

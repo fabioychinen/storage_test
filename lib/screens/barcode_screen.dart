@@ -19,7 +19,7 @@ class _BarCodeScreenState extends State<BarCodeScreen> {
       false,
       ScanMode.BARCODE,
     );
-    setState(() => barcode = code != '-1' ? code : 'Invalid');
+    setState(() => barcode = code != '-1' ? code : 'Inválido');
   }
 
   @override
@@ -41,9 +41,16 @@ class _BarCodeScreenState extends State<BarCodeScreen> {
               ),
             ElevatedButton.icon(
               onPressed: readBARCode,
-              icon: const Icon(Icons.barcode_reader),
-              label: const Text('Scan now'),
-            ),
+              icon: Image.asset('assets/images/barcode.png.png'),
+              label: const Text(
+                'Escanear',
+                style: TextStyle(
+                    fontFamily: 'RussoOne',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromRGBO(10, 10, 10, 1)),
+              ),
+            )
           ],
         ),
       ),
