@@ -1,18 +1,18 @@
 import 'package:storage_test/models/product.dart';
 
 abstract class ProductState {
-  List<Product> products;
+  List<Product> product;
 
   ProductState({
-    required this.products,
+    required this.product,
   });
 }
 
 class ProductInitialState extends ProductState {
-  ProductInitialState() : super(products: []);
+  ProductInitialState() : super(product: []);
 }
 
 class ProductSuccessState extends ProductState {
-  ProductSuccessState({required List<Product> products})
-      : super(products: products);
+  ProductSuccessState({required List<Product> product})
+      : super(product: product);
 }

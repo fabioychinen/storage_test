@@ -13,32 +13,32 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   // Stream<ProductState> get stream => _outputProductController.stream;
 
   ProductBloc() : super(ProductInitialState()) {
-    // _inputClientController.stream.listen(_mapEventToState);
+    // _inputProductController.stream.listen(_mapEventToState);
     on<LoadProductEvent>(
       (event, emit) =>
-          emit(ProductSuccessState(products: _productRepo.loadProduct())),
+          emit(ProductSuccessState(product: _productRepo.loadProduct())),
     );
 
     on<AddProductEvent>(
-      (event, emit) => emit(ProductSuccessState(
-          products: _productRepo.addProduct(event.product))),
+      (event, emit) => emit(
+          ProductSuccessState(product: _productRepo.addProduct(event.product))),
     );
 
     on<RemoveProductEvent>(
       (event, emit) => emit(ProductSuccessState(
-          products: _productRepo.removeProduct(event.product))),
+          product: _productRepo.removeProduct(event.product))),
     );
   }
 
   // _mapEventToState(ProductEvent event) {
-  //   List<Product> products = [];
+  //   List<Product> product = [];
   //   if (event is LoadProductEvent) {
-  //     products = _productRepo.loadProducts();
+  //     product = _productRepo.loadProduct();
   //   } else if (event is AddProductEvent) {
-  //     products = _productRepo.addProduct(event.product);
+  //     product = _productRepo.addProduct(event.product);
   //   } else if (event is RemoveProductEvent) {
-  //     products = _productRepo.removeProduct(event.product);
+  //     product = _productRepo.removeProduct(event.product);
   //   }
-  //   _outputClientController.add(ClientSuccessState(clients: clients));
+  //   _outputProductController.add(ProductSuccessState(product: product));
   // }
 }

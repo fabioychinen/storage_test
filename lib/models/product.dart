@@ -9,4 +9,8 @@ class Product {
       required this.name,
       required this.quantity,
       required this.barcode});
+
+  copyWith({required id}) {}
+
+  toMap() {}
 }

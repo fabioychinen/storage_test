@@ -5,6 +5,9 @@ import 'package:sqflite/sqflite.dart';
 import 'package:storage_test/data/domain/entities/product_entity.dart';
 
 class ProductSqliteDatasource {
+  // ignore: prefer_typing_uninitialized_variables
+  static var instance;
+
   Future<Database> _getDatabase() async {
     //await deleteDatabase(
     //join(await getDatabasesPath(), databaseName),
@@ -16,7 +19,7 @@ class ProductSqliteDatasource {
         await db.execute(createProductTableScript);
         await db.rawInsert('''insert into $productTableName(
         $productColumnProductId, $productColumnName, $productColumnQuantity, $productColumnBarcode
-      ) VALUES ('Laranja, 12, 956100234)''');
+      ) VALUES ('1,Laranja, 12, 956100234)''');
       },
       version: databaseVersion,
     );

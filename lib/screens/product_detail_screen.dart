@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:storage_test/models/product.dart';
 
-class ProductDetailPage extends StatelessWidget {
+class ProductDetailScreen extends StatelessWidget {
   final Product product;
 
-  const ProductDetailPage({super.key, required this.product});
+  const ProductDetailScreen({
+    super.key,
+    required this.product,
+  });
 
   @override
   Widget build(BuildContext context) {

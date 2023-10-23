@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:storage_test/blocs/barcode_bloc.dart';
 
 class BarCodeScreen extends StatefulWidget {
   const BarCodeScreen({Key? key}) : super(key: key);
@@ -9,17 +11,28 @@ class BarCodeScreen extends StatefulWidget {
 }
 
 class _BarCodeScreenState extends State<BarCodeScreen> {
-  String barcode = '';
-  List<String> bardoces = [];
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => BarcodeBloc(),
+      child: const BarcodeScreenContents(),
+    );
+  }
+}
 
-  readBARCode() async {
+class BarcodeScreenContents extends StatelessWidget {
+  const BarcodeScreenContents({super.key});
+
+  void readBARCode(BuildContext context) async {
     String code = await FlutterBarcodeScanner.scanBarcode(
       "#FFFFFF",
       "Cancelar",
       false,
       ScanMode.BARCODE,
     );
-    setState(() => barcode = code != '-1' ? code : 'Inválido');
+    // ignore: use_build_context_synchronously
+    BlocProvider.of<BarcodeBloc>(context)
+        .add(UpdateBarcodeEvent(code != '-1' ? code : 'Inválido'));
   }
 
   @override
@@ -31,16 +44,13 @@ class _BarCodeScreenState extends State<BarCodeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (barcode != '')
-              Padding(
-                padding: const EdgeInsets.only(bottom: 24.0),
-                child: Text(
-                  'Barcode: $barcode',
-                  style: const TextStyle(fontSize: 20),
-                ),
-              ),
+            BlocBuilder<BarcodeBloc, String>(
+              builder: (context, barcode) {
+                return const Divider();
+              },
+            ),
             ElevatedButton.icon(
-              onPressed: readBARCode,
+              onPressed: () => readBARCode(context),
               icon: Image.asset('assets/images/barcode.png.png'),
               label: const Text(
                 'Escanear',

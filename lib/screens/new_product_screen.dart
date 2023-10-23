@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storage_test/blocs/product_bloc.dart';
+import 'package:storage_test/blocs/product_events.dart';
+import 'package:storage_test/data/product_sqlite_datasource.dart';
 import 'package:storage_test/screens/barcode_screen.dart';
+import '../models/product.dart';
 
 class NewProductScreen extends StatefulWidget {
   const NewProductScreen({super.key});
@@ -9,20 +14,26 @@ class NewProductScreen extends StatefulWidget {
 }
 
 class _NewProductScreenState extends State<NewProductScreen> {
-  List<String> products = [];
+  List<String> product = [];
   TextEditingController productController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
   TextEditingController barcodeController = TextEditingController();
 
-  void addProduct() {
-    setState(() {
-      String productName = productController.text;
-
-      if (productName.isNotEmpty) {
-        products.add(productName);
-        productController.clear();
-      }
-    });
+  void addProduct(BuildContext context) async {
+    final productBloc = BlocProvider.of<ProductBloc>(context);
+    final database = await ProductSqliteDatasource.instance.database;
+    final product = Product(
+      id: null,
+      name: productController.text,
+      quantity: int.tryParse(quantityController.text) ?? 0,
+      barcode: int.tryParse(barcodeController.text) ?? 0,
+    );
+    final id = await database.insert('products', product.toMap());
+    productBloc.add(AddProductEvent(productController.text,
+        product: product.copyWith(id: id)));
+    productController.clear();
+    quantityController.clear();
+    barcodeController.clear();
   }
 
   @override
@@ -71,7 +82,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
               ),
             ),
             ElevatedButton(
-              onPressed: addProduct,
+              onPressed: () => addProduct(context),
               child: const Text(
                 'Adicionar produto',
                 style: TextStyle(
@@ -100,10 +111,10 @@ class _NewProductScreenState extends State<NewProductScreen> {
                 )),
             Expanded(
               child: ListView.builder(
-                itemCount: products.length,
+                itemCount: product.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(products[index]),
+                    title: Text(product[index]),
                   );
                 },
               ),

@@ -6,10 +6,10 @@ class ProductRepository {
   List<Product> loadProduct() {
     _product.addAll([
       Product(
-        id: null,
+        id: 1,
         name: 'Laranja',
-        quantity: null,
-        barcode: null,
+        quantity: 12,
+        barcode: 123456789,
       )
     ]);
     return _product;

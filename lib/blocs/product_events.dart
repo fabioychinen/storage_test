@@ -7,7 +7,8 @@ class LoadProductEvent extends ProductEvent {}
 class AddProductEvent extends ProductEvent {
   Product product;
 
-  AddProductEvent({
+  AddProductEvent(
+    String text, {
     required this.product,
   });
 }

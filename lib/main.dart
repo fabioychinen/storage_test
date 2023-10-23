@@ -13,10 +13,10 @@ void main() {
 class WarehouseApp extends StatelessWidget {
   const WarehouseApp({super.key});
 
+  get product => null;
+
   @override
   Widget build(BuildContext context) {
-    // ignore: prefer_typing_uninitialized_variables
-    var product;
     return MaterialApp(
       title: 'Estoque',
       theme: ThemeData(
@@ -27,11 +27,10 @@ class WarehouseApp extends StatelessWidget {
         AppRoutes.homeScreen: (ctx) => const HomeScreen(),
         AppRoutes.newProductScreen: (ctx) => const NewProductScreen(),
         AppRoutes.barcodeScreen: (ctx) => const BarCodeScreen(),
+        AppRoutes.productListScreen: (ctx) =>
+            const ProductListScreen(productList: []),
         AppRoutes.productDetailScreen: (ctx) =>
-            ProductDetailPage(product: product),
-        AppRoutes.productListScreen: (ctx) => const ProductListScreen(
-              productList: [],
-            ),
+            ProductDetailScreen(product: product),
       },
     );
   }
