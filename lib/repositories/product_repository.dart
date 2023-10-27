@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
+
 import '../models/product.dart';
 
-class ProductRepository {
+class ProductRepository extends ChangeNotifier {
   final List<Product> _product = [];
 
   List<Product> loadProduct() {

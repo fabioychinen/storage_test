@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:storage_test/data/product_sqlite_datasource.dart';
+//import 'package:storage_test/data/product_sqlite_datasource.dart';
 import 'package:storage_test/models/product.dart';
 import 'package:storage_test/screens/product_detail_screen.dart';
-import '../blocs/product_bloc.dart';
-import '../blocs/product_events.dart';
-import '../blocs/product_state.dart';
+import 'package:storage_test/blocs/product_bloc.dart';
+import 'package:storage_test/blocs/product_events.dart';
+import 'package:storage_test/blocs/product_state.dart';
 
 class ProductListScreen extends StatefulWidget {
-  const ProductListScreen({super.key, required List productList});
+  final List<Product> productList;
+
+  const ProductListScreen({Key? key, required this.productList})
+      : super(key: key);
 
   @override
   State<ProductListScreen> createState() => _ProductListScreenState();
@@ -16,20 +19,12 @@ class ProductListScreen extends StatefulWidget {
 
 class _ProductListScreenState extends State<ProductListScreen> {
   late final ProductBloc _bloc;
-  late List<Product> productList;
+
   @override
   void initState() {
     super.initState();
     _bloc = ProductBloc();
     _bloc.add(LoadProductEvent());
-    _loadProductsFromDatabase();
-  }
-
-  Future<void> _loadProductsFromDatabase() async {
-    final products = await ProductSqliteDatasource.instance.getProducts();
-    setState(() {
-      productList = products;
-    });
   }
 
   @override
@@ -60,7 +55,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   itemBuilder: (context, index) => ListTile(
                     title: Text(productList[index].name),
                     trailing: IconButton(
-                      icon: Image.asset('assets/images/delete.png.png'),
+                      icon: const Icon(Icons.delete), // Ícone de deleção padrão
                       onPressed: () {
                         _bloc.add(
                             RemoveProductEvent(product: productList[index]));
