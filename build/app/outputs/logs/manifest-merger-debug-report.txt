@@ -41,6 +41,7 @@ INJECTED from D:\Developement\storage_test\android\app\src\main\AndroidManifest.
 INJECTED from D:\Developement\storage_test\android\app\src\main\AndroidManifest.xml:1:1-33:12
 INJECTED from D:\Developement\storage_test\android\app\src\main\AndroidManifest.xml:1:1-33:12
 MERGED from D:\Developement\storage_test\android\app\src\main\AndroidManifest.xml:1:1-33:12
+MERGED from [:shared_preferences_android] D:\Developement\storage_test\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:flutter_barcode_scanner] D:\Developement\storage_test\build\flutter_barcode_scanner\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-21:12
 MERGED from [:flutter_plugin_android_lifecycle] D:\Developement\storage_test\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:sqflite] D:\Developement\storage_test\build\sqflite\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
@@ -115,6 +116,8 @@ uses-sdk
 INJECTED from D:\Developement\storage_test\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\Developement\storage_test\android\app\src\main\AndroidManifest.xml
 INJECTED from D:\Developement\storage_test\android\app\src\main\AndroidManifest.xml
+MERGED from [:shared_preferences_android] D:\Developement\storage_test\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:shared_preferences_android] D:\Developement\storage_test\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_barcode_scanner] D:\Developement\storage_test\build\flutter_barcode_scanner\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_barcode_scanner] D:\Developement\storage_test\build\flutter_barcode_scanner\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_plugin_android_lifecycle] D:\Developement\storage_test\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41

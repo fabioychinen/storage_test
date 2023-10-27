@@ -8,7 +8,7 @@ const String productColumnBarcode = 'barcode';
 
 const String createProductTableScript = '''
 CREATE TABLE $productTableName (
-  $productColumnProductId INTEGER PRIMARY KEY,
+  $productColumnProductId INTEGER PRIMARY KEY AUTOINCREMENT,
   $productColumnName TEXT,
   $productColumnQuantity INTEGER,
   $productColumnBarcode INTEGER
