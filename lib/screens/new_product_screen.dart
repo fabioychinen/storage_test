@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storage_test/blocs/product_bloc.dart';
-import 'package:storage_test/data/product_sqlite_datasource.dart';
+import 'package:storage_test/data/product_db.dart';
 import 'package:storage_test/screens/barcode_screen.dart';
 import 'package:storage_test/models/product.dart';
 import 'package:storage_test/blocs/product_events.dart';
@@ -20,9 +20,8 @@ class _NewProductScreenState extends State<NewProductScreen> {
 
   void addProduct(BuildContext context) async {
     final productBloc = BlocProvider.of<ProductBloc>(context);
-    final productDb = ProductDB();
-    final database =
-        await productDb.getDatabase(); // Chame o método getDatabase
+    final productDb = ProductDB.instance;
+    final database = await productDb.database;
     final product = Product(
       id: null,
       name: productController.text,
