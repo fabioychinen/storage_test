@@ -13,6 +13,10 @@ class ProductInitialState extends ProductState {
 }
 
 class ProductSuccessState extends ProductState {
-  ProductSuccessState({required List<Product> product})
-      : super(product: product);
+  ProductSuccessState(
+      {required List<Product> products, required List<Product> product})
+      : super(product: products);
+
+  ProductSuccessState.single(Product product, {required products})
+      : super(product: [product]);
 }

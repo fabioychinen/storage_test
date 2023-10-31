@@ -57,12 +57,14 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
+            SizedBox(
               width: 200,
               height: 50,
               child: ElevatedButton(
-                onPressed: null,
-                child: Text(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(AppRoutes.productListScreen);
+                },
+                child: const Text(
                   'Remover produtos',
                   style: TextStyle(
                       fontFamily: 'RussoOne',

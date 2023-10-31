@@ -4,13 +4,33 @@ class Product {
   late int? quantity;
   late int? barcode;
 
-  Product(
-      {required this.id,
-      required this.name,
-      required this.quantity,
-      required this.barcode});
+  Product({
+    required this.id,
+    required this.name,
+    required this.quantity,
+    required this.barcode,
+  });
 
-  copyWith({required id}) {}
+  Product copyWith({
+    int? id,
+    String? name,
+    int? quantity,
+    int? barcode,
+  }) {
+    return Product(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      quantity: quantity ?? this.quantity,
+      barcode: barcode ?? this.barcode,
+    );
+  }
 
-  toMap() {}
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'quantity': quantity,
+      'barcode': barcode,
+    };
+  }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-//import 'package:storage_test/data/product_sqlite_datasource.dart';
 import 'package:storage_test/models/product.dart';
 import 'package:storage_test/screens/product_detail_screen.dart';
 import 'package:storage_test/blocs/product_bloc.dart';
@@ -55,10 +54,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   itemBuilder: (context, index) => ListTile(
                     title: Text(productList[index].name),
                     trailing: IconButton(
-                      icon: const Icon(Icons.delete), // Ícone de deleção padrão
+                      icon: const Icon(Icons.delete),
                       onPressed: () {
-                        _bloc.add(
-                            RemoveProductEvent(product: productList[index]));
+                        _bloc.add(RemoveProductEvent(
+                            product: productList[index], productId: 1));
                       },
                     ),
                     onTap: () {

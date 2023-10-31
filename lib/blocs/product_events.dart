@@ -14,9 +14,10 @@ class AddProductEvent extends ProductEvent {
 }
 
 class RemoveProductEvent extends ProductEvent {
-  Product product;
+  int productId;
 
   RemoveProductEvent({
-    required this.product,
+    required this.productId,
+    required Product product,
   });
 }
