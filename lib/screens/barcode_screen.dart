@@ -30,6 +30,7 @@ class BarcodeScreenContents extends StatelessWidget {
       false,
       ScanMode.BARCODE,
     );
+
     // ignore: use_build_context_synchronously
     BlocProvider.of<BarcodeBloc>(context)
         .add(UpdateBarcodeEvent(code != '-1' ? code : 'Inválido'));
@@ -51,7 +52,7 @@ class BarcodeScreenContents extends StatelessWidget {
             ),
             ElevatedButton.icon(
               onPressed: () => readBARCode(context),
-              icon: Image.asset('assets/images/barcode.png.png'),
+              icon: Image.asset('assets/images/barcode.png'),
               label: const Text(
                 'Escanear',
                 style: TextStyle(
