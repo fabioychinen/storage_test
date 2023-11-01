@@ -4,20 +4,20 @@ import 'package:storage_test/blocs/product_state.dart';
 import 'package:storage_test/repositories/product_repository.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
-  final _productRepo = ProductRepository();
+  final _productRepo = ProductRepository(databasePath: 'storage.db');
 
   ProductBloc() : super(ProductInitialState()) {
     on<LoadProductEvent>(
       (event, emit) async {
         final products = await _productRepo.loadProducts();
-        emit(ProductSuccessState(product: products, products: []));
+        emit(ProductSuccessState(products: products));
       },
     );
 
     on<AddProductEvent>(
       (event, emit) async {
         final addedProduct = await _productRepo.addProduct(event.product);
-        emit(ProductSuccessState.single(addedProduct, products: null));
+        emit(ProductSuccessState.single(addedProduct));
       },
     );
 
@@ -25,7 +25,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       (event, emit) async {
         await _productRepo.removeProduct(event.productId);
         final products = await _productRepo.loadProducts();
-        emit(ProductSuccessState(product: products, products: []));
+        emit(ProductSuccessState(products: products));
       },
     );
   }

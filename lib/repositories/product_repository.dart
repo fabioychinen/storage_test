@@ -1,35 +1,37 @@
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
-//import 'package:storage_test/data/product_db.dart';
 import 'package:storage_test/models/product.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ProductRepository extends ChangeNotifier {
+  ProductRepository({String? databasePath}) {
+    initDatabase(databasePath);
+  }
+
   late Database _database;
 
-  ProductRepository() {
-    initDatabase();
+  Future<void> initDatabase(String? databasePath) async {
+    _database = await _initDatabase(databasePath);
   }
 
-  Future<void> initDatabase() async {
-    _database = await _initDatabase();
-  }
+  Future<Database> _initDatabase(String? databasePath) async {
+    if (databasePath == null) {
+      databasePath = await getDatabasesPath();
+      databasePath = join(databasePath, 'storage.db');
+    }
 
-  Future<Database> _initDatabase() async {
-    final databasePath = await getDatabasesPath();
-    final path = join(databasePath, 'storage.db');
     return openDatabase(
-      path,
+      databasePath,
       version: 1,
       onCreate: (db, version) {
         db.execute('''
           CREATE TABLE products (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
-            quantity INTEGER,
-            barcode INTEGER
-          )
-        ''');
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT,
+  quantity INT,
+  barcode INT
+); 
+''');
       },
     );
   }
@@ -39,9 +41,6 @@ class ProductRepository extends ChangeNotifier {
         await _database.query('products');
     return List.generate(productMaps.length, (i) {
       return Product(
-        id: productMaps[i]['id'] != null
-            ? int.tryParse(productMaps[i]['id'].toString())
-            : null,
         name: productMaps[i]['name'] as String,
         quantity: productMaps[i]['quantity'] != null
             ? int.tryParse(productMaps[i]['quantity'].toString())
@@ -54,7 +53,7 @@ class ProductRepository extends ChangeNotifier {
   }
 
   Future<Product> addProduct(Product product) async {
-    final id = await _database.insert('products', product.toMap());
+    final id = await _database.insert('products', product.toMapWithoutId());
 
     product = product.copyWith(id: id);
     notifyListeners();

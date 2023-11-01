@@ -5,19 +5,15 @@ abstract class ProductEvent {}
 class LoadProductEvent extends ProductEvent {}
 
 class AddProductEvent extends ProductEvent {
-  Product product;
+  final Product product;
 
-  AddProductEvent(
-    String text, {
-    required this.product,
-  });
+  AddProductEvent(this.product);
 }
 
 class RemoveProductEvent extends ProductEvent {
-  int productId;
+  final int productId;
 
   RemoveProductEvent({
     required this.productId,
-    required Product product,
   });
 }

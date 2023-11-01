@@ -25,12 +25,12 @@ class ProductDB {
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
-    CREATE TABLE products (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
-      quantity INT,
-      barcode INT
-    );
-  ''');
+CREATE TABLE products (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT,
+  quantity INT,
+  barcode INT
+); VALUES 
+''');
   }
 }
