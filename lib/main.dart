@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storage_test/blocs/product_bloc.dart';
+import 'package:storage_test/models/product.dart';
 import 'package:storage_test/screens/barcode_screen.dart';
 import 'package:storage_test/screens/home_screen.dart';
 import 'package:storage_test/screens/new_product_screen.dart';
@@ -13,9 +14,7 @@ void main() {
 }
 
 class WarehouseApp extends StatelessWidget {
-  const WarehouseApp({super.key});
-
-  get product => null;
+  const WarehouseApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +32,10 @@ class WarehouseApp extends StatelessWidget {
           AppRoutes.barcodeScreen: (ctx) => const BarCodeScreen(),
           AppRoutes.productListScreen: (ctx) =>
               const ProductListScreen(productList: []),
-          AppRoutes.productDetailScreen: (ctx) =>
-              ProductDetailScreen(product: product),
+          AppRoutes.productDetailScreen: (ctx) {
+            final product = ModalRoute.of(ctx)!.settings.arguments as Product;
+            return ProductDetailScreen(product: product);
+          }
         },
       ),
     );

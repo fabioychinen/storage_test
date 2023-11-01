@@ -16,9 +16,10 @@ class ProductDetailScreen extends StatelessWidget {
         title: const Text(
           'Detalhes do Produto',
           style: TextStyle(
-              fontFamily: 'RussoOne',
-              fontSize: 20,
-              fontWeight: FontWeight.bold),
+            fontFamily: 'RussoOne',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: Padding(

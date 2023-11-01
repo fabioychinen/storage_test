@@ -23,14 +23,17 @@ class _NewProductScreenState extends State<NewProductScreen> {
     final productDb = ProductDB.instance;
     final database = await productDb.database;
     final product = Product(
-      id: null,
       name: productController.text,
       quantity: int.tryParse(quantityController.text) ?? 0,
       barcode: int.tryParse(barcodeController.text) ?? 0,
     );
+
     final id = await database.insert('products', product.toMap());
-    productBloc.add(AddProductEvent(productController.text,
-        product: product.copyWith(id: id)));
+
+    if (id == true) {
+      final productWithId = product.copyWith(id: id);
+      productBloc.add(AddProductEvent(productWithId));
+    }
   }
 
   @override

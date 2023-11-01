@@ -48,18 +48,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   child: CircularProgressIndicator(),
                 );
               } else if (state is ProductSuccessState) {
-                final productList = state.product;
+                final productList = state.products;
                 return ListView.separated(
                   itemCount: productList.length,
                   itemBuilder: (context, index) => ListTile(
                     title: Text(productList[index].name),
                     trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        _bloc.add(RemoveProductEvent(
-                            product: productList[index], productId: 1));
-                      },
-                    ),
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          _bloc.add(RemoveProductEvent(
+                              productId: productList[index].id!));
+                        }),
                     onTap: () {
                       Navigator.push(
                         context,
