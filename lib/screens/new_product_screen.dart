@@ -30,10 +30,8 @@ class _NewProductScreenState extends State<NewProductScreen> {
 
     final id = await database.insert('products', product.toMap());
 
-    if (id == true) {
-      final productWithId = product.copyWith(id: id);
-      productBloc.add(AddProductEvent(productWithId));
-    }
+    final productWithId = product.copyWith(id: id);
+    productBloc.add(AddProductEvent(productWithId));
   }
 
   @override
