@@ -4,13 +4,13 @@ import 'package:storage_test/models/product.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ProductRepository extends ChangeNotifier {
+  late Database _database;
+
   ProductRepository({String? databasePath}) {
     initDatabase(databasePath);
   }
 
-  late Database _database;
-
-  Future<void> initDatabase(String? databasePath) async {
+  void initDatabase(String? databasePath) async {
     _database = await _initDatabase(databasePath);
   }
 
@@ -26,12 +26,12 @@ class ProductRepository extends ChangeNotifier {
       onCreate: (db, version) {
         db.execute('''
           CREATE TABLE products (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT,
-  quantity INT,
-  barcode INT
-); 
-''');
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            quantity INT,
+            barcode INT
+          ); 
+        ''');
       },
     );
   }

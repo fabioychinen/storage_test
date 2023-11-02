@@ -28,52 +28,55 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Lista de Produtos',
-          style: TextStyle(
-              fontFamily: 'RussoOne',
-              fontSize: 20,
-              fontWeight: FontWeight.bold),
+    return BlocProvider(
+      create: (context) => ProductBloc(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Lista de Produtos',
+            style: TextStyle(
+                fontFamily: 'RussoOne',
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24),
-        child: BlocBuilder<ProductBloc, ProductState>(
-            bloc: _bloc,
-            builder: (context, state) {
-              if (state is ProductInitialState) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is ProductSuccessState) {
-                final productList = state.products;
-                return ListView.separated(
-                  itemCount: productList.length,
-                  itemBuilder: (context, index) => ListTile(
-                    title: Text(productList[index].name),
-                    trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          _bloc.add(RemoveProductEvent(
-                              productId: productList[index].id!));
-                        }),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ProductDetailScreen(product: productList[index]),
-                        ),
-                      );
-                    },
-                  ),
-                  separatorBuilder: (_, __) => const Divider(),
-                );
-              }
-              return Container();
-            }),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          child: BlocBuilder<ProductBloc, ProductState>(
+              bloc: _bloc,
+              builder: (context, state) {
+                if (state is ProductInitialState) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is ProductSuccessState) {
+                  final productList = state.products;
+                  return ListView.separated(
+                    itemCount: productList.length,
+                    itemBuilder: (context, index) => ListTile(
+                      title: Text(productList[index].name),
+                      trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            _bloc.add(RemoveProductEvent(
+                                productId: productList[index].id!));
+                          }),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailScreen(
+                                product: productList[index]),
+                          ),
+                        );
+                      },
+                    ),
+                    separatorBuilder: (_, __) => const Divider(),
+                  );
+                }
+                return Container();
+              }),
+        ),
       ),
     );
   }
