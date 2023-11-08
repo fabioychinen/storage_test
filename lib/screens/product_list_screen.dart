@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storage_test/models/product.dart';
+import 'package:storage_test/repositories/product_repository.dart';
 import 'package:storage_test/screens/product_detail_screen.dart';
 import 'package:storage_test/blocs/product_bloc.dart';
 import 'package:storage_test/blocs/product_events.dart';
@@ -17,19 +18,20 @@ class ProductListScreen extends StatefulWidget {
 }
 
 class _ProductListScreenState extends State<ProductListScreen> {
-  late final ProductBloc _bloc;
+  late ProductBloc _bloc;
+  late List<Product> productlist = [];
 
   @override
   void initState() {
     super.initState();
-    _bloc = ProductBloc();
+    _bloc = ProductBloc(productRepository: ProductRepository());
     _bloc.add(LoadProductEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProductBloc(),
+      create: (context) => ProductBloc(productRepository: ProductRepository()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text(

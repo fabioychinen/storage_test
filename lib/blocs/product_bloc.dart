@@ -6,7 +6,8 @@ import 'package:storage_test/repositories/product_repository.dart';
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final _productRepo = ProductRepository(databasePath: 'storage.db');
 
-  ProductBloc() : super(ProductInitialState()) {
+  ProductBloc({required ProductRepository productRepository})
+      : super(ProductInitialState()) {
     on<LoadProductEvent>(
       (event, emit) async {
         final products = await _productRepo.loadProducts();
