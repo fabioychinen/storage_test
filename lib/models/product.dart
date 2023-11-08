@@ -36,10 +36,10 @@ class Product {
     int? barcode,
   }) {
     return Product(
-      name: name ?? this.name,
-      quantity: quantity ?? this.quantity,
-      barcode: barcode ?? this.barcode,
-    )..id = id ?? this.id;
+        name: name ?? this.name,
+        quantity: quantity ?? this.quantity,
+        barcode: barcode ?? this.barcode,
+        id: id ?? this.id);
   }
 
   Map<String, dynamic> toMapWithoutId() {

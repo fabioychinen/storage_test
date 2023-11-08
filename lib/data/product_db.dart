@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 class ProductDB {
   ProductDB._();
   static final ProductDB instance = ProductDB._();
-  static Database? _database;
+  static late Database? _database;
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -25,12 +25,16 @@ class ProductDB {
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
-CREATE TABLE products (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT,
-  quantity INT,
-  barcode INT
-); VALUES 
-''');
+      CREATE TABLE products (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        quantity INT,
+        barcode INT
+      ); 
+    ''');
+  }
+
+  Future<void> initDatabase() async {
+    await _initDatabase();
   }
 }

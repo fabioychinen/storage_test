@@ -4,7 +4,7 @@ import 'package:storage_test/models/product.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ProductRepository extends ChangeNotifier {
-  late Database _database;
+  static late Database _database;
 
   ProductRepository({String? databasePath}) {
     initDatabase(databasePath);
