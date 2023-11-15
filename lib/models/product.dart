@@ -13,10 +13,10 @@ class Product {
 
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
-      id: map['id'],
-      name: map['name'],
-      quantity: map['quantity'],
-      barcode: map['barcode'],
+      id: map['id'] as int,
+      name: map['name'] as String,
+      quantity: map['quantity'] as int?,
+      barcode: map['barcode'] as int?,
     );
   }
 
@@ -30,7 +30,7 @@ class Product {
   }
 
   Product copyWith({
-    int? id,
+    required int id,
     String? name,
     int? quantity,
     int? barcode,
@@ -39,7 +39,7 @@ class Product {
         name: name ?? this.name,
         quantity: quantity ?? this.quantity,
         barcode: barcode ?? this.barcode,
-        id: id ?? this.id);
+        id: id);
   }
 
   Map<String, dynamic> toMapWithoutId() {

@@ -41,12 +41,15 @@ class ProductRepository extends ChangeNotifier {
         await _database.query('products');
     return List.generate(productMaps.length, (i) {
       return Product(
+        id: productMaps[i]['id'] != null
+            ? int.parse(productMaps[i]['id'].toString())
+            : 0,
         name: productMaps[i]['name'] as String,
         quantity: productMaps[i]['quantity'] != null
-            ? int.tryParse(productMaps[i]['quantity'].toString())
+            ? int.parse(productMaps[i]['quantity'].toString())
             : null,
         barcode: productMaps[i]['barcode'] != null
-            ? int.tryParse(productMaps[i]['barcode'].toString())
+            ? int.parse(productMaps[i]['barcode'].toString())
             : null,
       );
     });
