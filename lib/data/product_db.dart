@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 class ProductDB {
   ProductDB._();
   static final ProductDB instance = ProductDB._();
-  static late Database? _database;
+  static Database? _database;
 
   Future<Database> get database async {
     if (_database != null) return _database!;
