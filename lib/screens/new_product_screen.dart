@@ -26,9 +26,10 @@ class _NewProductScreenState extends State<NewProductScreen> {
       name: productController.text,
       quantity: int.tryParse(quantityController.text) ?? 0,
       barcode: int.tryParse(barcodeController.text) ?? 0,
+      id: 0,
     );
 
-    final id = await database.insert('products', product.toMap());
+    final id = await database.insert('products', product.toMapWithoutId());
 
     final productWithId = product.copyWith(id: id);
     productBloc.add(AddProductEvent(productWithId));
