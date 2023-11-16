@@ -50,70 +50,68 @@ class _NewProductScreenState extends State<NewProductScreen> {
         ),
       ),
       body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: productController,
-                decoration: const InputDecoration(
-                  hintText: 'Nome do produto',
-                ),
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: productController,
+              decoration: const InputDecoration(
+                hintText: 'Nome do produto',
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                keyboardType: TextInputType.number,
-                controller: quantityController,
-                decoration: const InputDecoration(
-                  hintText: 'Quantidade',
-                ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              keyboardType: TextInputType.number,
+              controller: quantityController,
+              decoration: const InputDecoration(
+                hintText: 'Quantidade',
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                keyboardType: TextInputType.number,
-                controller: barcodeController,
-                decoration: const InputDecoration(
-                  hintText: 'Digite o código de barras',
-                ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              keyboardType: TextInputType.number,
+              controller: barcodeController,
+              decoration: const InputDecoration(
+                hintText: 'Digite o código de barras',
               ),
             ),
-            ElevatedButton(
-              onPressed: () => addProduct(context),
-              child: const Text(
-                'Adicionar produto',
-                style: TextStyle(
-                  fontFamily: 'RussoOne',
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromRGBO(10, 10, 10, 1),
-                ),
+          ),
+          ElevatedButton(
+            onPressed: () => addProduct(context),
+            child: const Text(
+              'Adicionar produto',
+              style: TextStyle(
+                fontFamily: 'RussoOne',
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(10, 10, 10, 1),
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const BarCodeScreen(),
-                  ),
-                );
-              },
-              child: const Text(
-                'Código de barras',
-                style: TextStyle(
-                  fontFamily: 'RussoOne',
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromRGBO(10, 10, 10, 1),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const BarCodeScreen(),
                 ),
+              );
+            },
+            child: const Text(
+              'Código de barras',
+              style: TextStyle(
+                fontFamily: 'RussoOne',
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(10, 10, 10, 1),
               ),
             ),
-          ],
-        ),
+          ),
+        ]),
       ),
     );
   }
