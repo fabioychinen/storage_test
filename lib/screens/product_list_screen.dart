@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storage_test/models/product.dart';
-//import 'package:storage_test/repositories/product_repository.dart';
 import 'package:storage_test/screens/product_detail_screen.dart';
 import 'package:storage_test/blocs/product_bloc.dart';
 import 'package:storage_test/blocs/product_events.dart';

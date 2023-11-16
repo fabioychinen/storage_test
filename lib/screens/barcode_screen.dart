@@ -3,25 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:storage_test/blocs/barcode_bloc.dart';
 
-class BarCodeScreen extends StatefulWidget {
-  const BarCodeScreen({Key? key}) : super(key: key);
-
-  @override
-  State<BarCodeScreen> createState() => _BarCodeScreenState();
-}
-
-class _BarCodeScreenState extends State<BarCodeScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => BarcodeBloc(),
-      child: const BarcodeScreenContents(),
-    );
-  }
-}
-
-class BarcodeScreenContents extends StatelessWidget {
-  const BarcodeScreenContents({super.key});
+class BarCodeScreen extends StatelessWidget {
+  const BarCodeScreen({super.key});
 
   void readBARCode(BuildContext context) async {
     String code = await FlutterBarcodeScanner.scanBarcode(
@@ -47,19 +30,29 @@ class BarcodeScreenContents extends StatelessWidget {
           children: [
             BlocBuilder<BarcodeBloc, String>(
               builder: (context, barcode) {
-                return const Divider();
+                return Text(
+                  'Código de Barras: $barcode',
+                  style: const TextStyle(
+                    fontFamily: 'RussoOne',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromRGBO(10, 10, 10, 1),
+                  ),
+                );
               },
             ),
+            const Divider(),
             ElevatedButton.icon(
               onPressed: () => readBARCode(context),
               icon: Image.asset('assets/images/barcode.png'),
               label: const Text(
                 'Escanear',
                 style: TextStyle(
-                    fontFamily: 'RussoOne',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromRGBO(10, 10, 10, 1)),
+                  fontFamily: 'RussoOne',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromRGBO(10, 10, 10, 1),
+                ),
               ),
             )
           ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storage_test/blocs/barcode_bloc.dart';
 import 'package:storage_test/blocs/product_bloc.dart';
 import 'package:storage_test/models/product.dart';
 import 'package:storage_test/repositories/product_repository.dart';
@@ -17,8 +18,16 @@ void main() async {
   productRepository.initDatabase('storage.db');
 
   runApp(
-    BlocProvider(
-      create: (context) => ProductBloc(productRepository: productRepository),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              ProductBloc(productRepository: productRepository),
+        ),
+        BlocProvider(
+          create: (context) => BarcodeBloc(),
+        ),
+      ],
       child: const WarehouseApp(),
     ),
   );
