@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:storage_test/core/core_strings.dart';
 import 'package:storage_test/utils/app_routes.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -10,7 +11,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         shadowColor: const Color.fromARGB(192, 78, 78, 78),
         title: const Text(
-          'Estoque',
+          CoreStrings.stock,
           style: TextStyle(
               fontFamily: 'RussoOne',
               fontSize: 20,
@@ -31,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                   Navigator.of(context).pushNamed(AppRoutes.productListScreen);
                 },
                 child: const Text(
-                  'Lista de produtos',
+                  CoreStrings.productList,
                   style: TextStyle(
                       fontFamily: 'RussoOne',
                       fontSize: 16,
@@ -48,7 +49,7 @@ class HomeScreen extends StatelessWidget {
                   Navigator.of(context).pushNamed(AppRoutes.newProductScreen);
                 },
                 child: const Text(
-                  'Adicionar produtos',
+                  CoreStrings.addProducts,
                   style: TextStyle(
                       fontFamily: 'RussoOne',
                       fontSize: 16,
@@ -65,7 +66,7 @@ class HomeScreen extends StatelessWidget {
                   Navigator.of(context).pushNamed(AppRoutes.productListScreen);
                 },
                 child: const Text(
-                  'Remover produtos',
+                  CoreStrings.removeProducts,
                   style: TextStyle(
                       fontFamily: 'RussoOne',
                       fontSize: 16,

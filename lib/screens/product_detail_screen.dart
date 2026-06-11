@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:storage_test/core/core_strings.dart';
 import 'package:storage_test/models/product.dart';
 
 class ProductDetailScreen extends StatelessWidget {
@@ -14,7 +15,7 @@ class ProductDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Detalhes do Produto',
+          CoreStrings.productDetails,
           style: TextStyle(
             fontFamily: 'RussoOne',
             fontSize: 20,
@@ -28,13 +29,13 @@ class ProductDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Nome: ${product.name}',
+              CoreStrings.nameOf(product.name),
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            Text('Quantidade: ${product.quantity}'),
+            Text(CoreStrings.quantityOf(product.quantity)),
             const SizedBox(height: 10),
-            Text('Código de Barras: ${product.barcode}'),
+            Text(CoreStrings.barcodeOf(product.barcode)),
           ],
         ),
       ),

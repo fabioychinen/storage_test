@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storage_test/blocs/product_bloc.dart';
+import 'package:storage_test/core/core_strings.dart';
 import 'package:storage_test/data/product_db.dart';
 import 'package:storage_test/screens/barcode_screen.dart';
 import 'package:storage_test/models/product.dart';
@@ -40,7 +41,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Estoque',
+          CoreStrings.stock,
           style: TextStyle(
             fontFamily: 'RussoOne',
             fontSize: 20,
@@ -56,7 +57,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
             child: TextField(
               controller: productController,
               decoration: const InputDecoration(
-                hintText: 'Nome do produto',
+                hintText: CoreStrings.productName,
               ),
             ),
           ),
@@ -66,7 +67,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
               keyboardType: TextInputType.number,
               controller: quantityController,
               decoration: const InputDecoration(
-                hintText: 'Quantidade',
+                hintText: CoreStrings.quantity,
               ),
             ),
           ),
@@ -76,14 +77,14 @@ class _NewProductScreenState extends State<NewProductScreen> {
               keyboardType: TextInputType.number,
               controller: barcodeController,
               decoration: const InputDecoration(
-                hintText: 'Digite o código de barras',
+                hintText: CoreStrings.enterBarcode,
               ),
             ),
           ),
           ElevatedButton(
             onPressed: () => addProduct(context),
             child: const Text(
-              'Adicionar produto',
+              CoreStrings.addProduct,
               style: TextStyle(
                 fontFamily: 'RussoOne',
                 fontSize: 16,
@@ -102,7 +103,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
               );
             },
             child: const Text(
-              'Código de barras',
+              CoreStrings.barcode,
               style: TextStyle(
                 fontFamily: 'RussoOne',
                 fontSize: 16,

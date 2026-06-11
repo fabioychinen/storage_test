@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storage_test/core/core_strings.dart';
 import 'package:storage_test/models/product.dart';
 import 'package:storage_test/screens/product_detail_screen.dart';
 import 'package:storage_test/blocs/product_bloc.dart';
@@ -31,7 +32,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Lista de Produtos',
+          CoreStrings.productList,
           style: TextStyle(
               fontFamily: 'RussoOne',
               fontSize: 20,

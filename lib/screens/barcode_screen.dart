@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:storage_test/blocs/barcode_bloc.dart';
+import 'package:storage_test/core/core_strings.dart';
 
 class BarCodeScreen extends StatelessWidget {
   const BarCodeScreen({super.key});
@@ -9,14 +10,14 @@ class BarCodeScreen extends StatelessWidget {
   void readBARCode(BuildContext context) async {
     String code = await FlutterBarcodeScanner.scanBarcode(
       "#FFFFFF",
-      "Cancelar",
+      CoreStrings.cancel,
       false,
       ScanMode.BARCODE,
     );
 
     // ignore: use_build_context_synchronously
     BlocProvider.of<BarcodeBloc>(context)
-        .add(UpdateBarcodeEvent(code != '-1' ? code : 'Inválido'));
+        .add(UpdateBarcodeEvent(code != '-1' ? code : CoreStrings.invalid));
   }
 
   @override
@@ -31,7 +32,7 @@ class BarCodeScreen extends StatelessWidget {
             BlocBuilder<BarcodeBloc, String>(
               builder: (context, barcode) {
                 return Text(
-                  'Código de Barras: $barcode',
+                  CoreStrings.barcodeOf(barcode),
                   style: const TextStyle(
                     fontFamily: 'RussoOne',
                     fontSize: 16,
@@ -46,7 +47,7 @@ class BarCodeScreen extends StatelessWidget {
               onPressed: () => readBARCode(context),
               icon: Image.asset('assets/images/barcode.png'),
               label: const Text(
-                'Escanear',
+                CoreStrings.scan,
                 style: TextStyle(
                   fontFamily: 'RussoOne',
                   fontSize: 16,
