@@ -1,4 +1,4 @@
-import 'package:storage_test/models/product.dart';
+import 'package:storage_test/domain/entities/product.dart';
 
 abstract class ProductState {
   List<Product> products;
@@ -15,6 +15,4 @@ class ProductInitialState extends ProductState {
 class ProductSuccessState extends ProductState {
   ProductSuccessState({required List<Product> products})
       : super(products: products);
-
-  ProductSuccessState.single(Product product) : super(products: [product]);
 }

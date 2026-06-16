@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:storage_test/blocs/product_bloc.dart';
 import 'package:storage_test/core/core_fonts.dart';
 import 'package:storage_test/core/core_strings.dart';
-import 'package:storage_test/data/product_db.dart';
-import 'package:storage_test/screens/barcode_screen.dart';
-import 'package:storage_test/models/product.dart';
-import 'package:storage_test/blocs/product_events.dart';
+import 'package:storage_test/domain/entities/product.dart';
+import 'package:storage_test/presentation/blocs/product/product_bloc.dart';
+import 'package:storage_test/presentation/blocs/product/product_events.dart';
+import 'package:storage_test/presentation/screens/barcode/barcode_screen.dart';
 
 class NewProductScreen extends StatefulWidget {
   const NewProductScreen({super.key});
@@ -16,25 +15,18 @@ class NewProductScreen extends StatefulWidget {
 }
 
 class _NewProductScreenState extends State<NewProductScreen> {
-  TextEditingController productController = TextEditingController();
-  TextEditingController quantityController = TextEditingController();
-  TextEditingController barcodeController = TextEditingController();
+  final productController = TextEditingController();
+  final quantityController = TextEditingController();
+  final barcodeController = TextEditingController();
 
-  void addProduct(BuildContext context) async {
-    final productBloc = BlocProvider.of<ProductBloc>(context);
-    final productDb = ProductDB.instance;
-    final database = await productDb.database;
+  void addProduct(BuildContext context) {
     final product = Product(
       name: productController.text,
       quantity: int.tryParse(quantityController.text) ?? 0,
       barcode: int.tryParse(barcodeController.text) ?? 0,
-      id: 0,
     );
 
-    final id = await database.insert('products', product.toMapWithoutId());
-
-    final productWithId = product.copyWith(id: id);
-    productBloc.add(AddProductEvent(productWithId));
+    context.read<ProductBloc>().add(AddProductEvent(product));
   }
 
   @override

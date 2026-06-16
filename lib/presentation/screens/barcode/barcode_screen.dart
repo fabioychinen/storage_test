@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:storage_test/blocs/barcode_bloc.dart';
+import 'package:storage_test/presentation/blocs/barcode/barcode_bloc.dart';
 import 'package:storage_test/core/core_assets.dart';
 import 'package:storage_test/core/core_fonts.dart';
 import 'package:storage_test/core/core_strings.dart';

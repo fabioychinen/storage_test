@@ -1,4 +1,4 @@
-import 'package:storage_test/models/product.dart';
+import 'package:storage_test/domain/entities/product.dart';
 
 abstract class ProductEvent {}
 
