@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:storage_test/core/core_fonts.dart';
 import 'package:storage_test/core/core_strings.dart';
 import 'package:storage_test/models/product.dart';
 
@@ -16,11 +17,7 @@ class ProductDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           CoreStrings.productDetails,
-          style: TextStyle(
-            fontFamily: 'RussoOne',
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: CoreFonts.title,
         ),
       ),
       body: Padding(

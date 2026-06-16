@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storage_test/core/core_fonts.dart';
 import 'package:storage_test/core/core_strings.dart';
 import 'package:storage_test/models/product.dart';
 import 'package:storage_test/screens/product_detail_screen.dart';
@@ -33,10 +34,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
       appBar: AppBar(
         title: const Text(
           CoreStrings.productList,
-          style: TextStyle(
-              fontFamily: 'RussoOne',
-              fontSize: 20,
-              fontWeight: FontWeight.bold),
+          style: CoreFonts.title,
         ),
       ),
       body: Padding(

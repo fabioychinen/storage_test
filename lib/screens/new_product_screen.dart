@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storage_test/blocs/product_bloc.dart';
+import 'package:storage_test/core/core_fonts.dart';
 import 'package:storage_test/core/core_strings.dart';
 import 'package:storage_test/data/product_db.dart';
 import 'package:storage_test/screens/barcode_screen.dart';
@@ -42,12 +43,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
       appBar: AppBar(
         title: const Text(
           CoreStrings.stock,
-          style: TextStyle(
-            fontFamily: 'RussoOne',
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Color.fromRGBO(10, 10, 10, 1),
-          ),
+          style: CoreFonts.title,
         ),
       ),
       body: Center(
@@ -85,12 +81,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
             onPressed: () => addProduct(context),
             child: const Text(
               CoreStrings.addProduct,
-              style: TextStyle(
-                fontFamily: 'RussoOne',
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(10, 10, 10, 1),
-              ),
+              style: CoreFonts.body,
             ),
           ),
           ElevatedButton(
@@ -104,12 +95,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
             },
             child: const Text(
               CoreStrings.barcode,
-              style: TextStyle(
-                fontFamily: 'RussoOne',
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(10, 10, 10, 1),
-              ),
+              style: CoreFonts.body,
             ),
           ),
         ]),

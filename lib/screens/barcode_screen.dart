@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:storage_test/blocs/barcode_bloc.dart';
+import 'package:storage_test/core/core_assets.dart';
+import 'package:storage_test/core/core_fonts.dart';
 import 'package:storage_test/core/core_strings.dart';
 
 class BarCodeScreen extends StatelessWidget {
@@ -33,27 +35,17 @@ class BarCodeScreen extends StatelessWidget {
               builder: (context, barcode) {
                 return Text(
                   CoreStrings.barcodeOf(barcode),
-                  style: const TextStyle(
-                    fontFamily: 'RussoOne',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromRGBO(10, 10, 10, 1),
-                  ),
+                  style: CoreFonts.body,
                 );
               },
             ),
             const Divider(),
             ElevatedButton.icon(
               onPressed: () => readBARCode(context),
-              icon: Image.asset('assets/images/barcode.png'),
+              icon: Image.asset(CoreAssets.barcode),
               label: const Text(
                 CoreStrings.scan,
-                style: TextStyle(
-                  fontFamily: 'RussoOne',
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromRGBO(10, 10, 10, 1),
-                ),
+                style: CoreFonts.body,
               ),
             )
           ],

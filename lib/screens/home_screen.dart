@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:storage_test/core/core_fonts.dart';
 import 'package:storage_test/core/core_strings.dart';
 import 'package:storage_test/utils/app_routes.dart';
 
@@ -12,11 +13,7 @@ class HomeScreen extends StatelessWidget {
         shadowColor: const Color.fromARGB(192, 78, 78, 78),
         title: const Text(
           CoreStrings.stock,
-          style: TextStyle(
-              fontFamily: 'RussoOne',
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color.fromRGBO(10, 10, 10, 1)),
+          style: CoreFonts.title,
         ),
       ),
       body: Center(
@@ -33,11 +30,7 @@ class HomeScreen extends StatelessWidget {
                 },
                 child: const Text(
                   CoreStrings.productList,
-                  style: TextStyle(
-                      fontFamily: 'RussoOne',
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(10, 10, 10, 1)),
+                  style: CoreFonts.body,
                 ),
               ),
             ),
@@ -50,11 +43,7 @@ class HomeScreen extends StatelessWidget {
                 },
                 child: const Text(
                   CoreStrings.addProducts,
-                  style: TextStyle(
-                      fontFamily: 'RussoOne',
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(10, 10, 10, 1)),
+                  style: CoreFonts.body,
                 ),
               ),
             ),
@@ -67,11 +56,7 @@ class HomeScreen extends StatelessWidget {
                 },
                 child: const Text(
                   CoreStrings.removeProducts,
-                  style: TextStyle(
-                      fontFamily: 'RussoOne',
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(10, 10, 10, 1)),
+                  style: CoreFonts.body,
                 ),
               ),
             ),
