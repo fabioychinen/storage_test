@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(flutter create *)",
-      "Read(//c/flutter/packages/flutter_tools/templates/**)",
-      "Bash(xargs -I{} sh -c 'echo {}; cat \"{}\"')"
-    ]
-  }
-}
