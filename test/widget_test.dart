@@ -79,7 +79,7 @@ void main() {
 
       expect(find.text('Parafuso'), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.delete));
+      await tester.tap(find.byIcon(Icons.delete_outline));
       await tester.pumpAndSettle();
 
       expect(find.text('Parafuso'), findsNothing);

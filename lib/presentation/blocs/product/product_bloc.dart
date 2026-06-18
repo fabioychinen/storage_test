@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:storage_test/core/app_logger.dart';
 import 'package:storage_test/domain/usecases/add_product.dart';
 import 'package:storage_test/domain/usecases/load_products.dart';
 import 'package:storage_test/domain/usecases/remove_product.dart';
@@ -20,6 +21,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         super(ProductInitialState()) {
     on<LoadProductEvent>(
       (event, emit) async {
+        appLogger.i('LoadProductEvent recebido');
         final products = await _loadProducts();
         emit(ProductSuccessState(products: products));
       },
@@ -27,6 +29,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
     on<AddProductEvent>(
       (event, emit) async {
+        appLogger.i('AddProductEvent recebido: ${event.product.name}');
         await _addProduct(event.product);
         final products = await _loadProducts();
         emit(ProductSuccessState(products: products));
@@ -35,6 +38,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
     on<RemoveProductEvent>(
       (event, emit) async {
+        appLogger.i('RemoveProductEvent recebido: id=${event.productId}');
         await _removeProduct(event.productId);
         final products = await _loadProducts();
         emit(ProductSuccessState(products: products));

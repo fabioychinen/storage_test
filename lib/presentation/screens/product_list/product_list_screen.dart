@@ -30,16 +30,43 @@ class _ProductListScreenState extends State<ProductListScreen> {
           style: CoreFonts.title,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24),
-        child: BlocBuilder<ProductBloc, ProductState>(
-          builder: (context, state) {
-            if (state is ProductSuccessState) {
-              return ProductListView(products: state.products);
+      body: BlocBuilder<ProductBloc, ProductState>(
+        builder: (context, state) {
+          if (state is ProductSuccessState) {
+            if (state.products.isEmpty) {
+              return const _EmptyProductList();
             }
-            return const Center(child: CircularProgressIndicator());
-          },
-        ),
+            return ProductListView(products: state.products);
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+}
+
+class _EmptyProductList extends StatelessWidget {
+  const _EmptyProductList();
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.inventory_2_outlined,
+            size: 56,
+            color: colorScheme.outline,
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            CoreStrings.emptyProductList,
+            style: CoreFonts.body,
+          ),
+        ],
       ),
     );
   }

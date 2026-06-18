@@ -29,68 +29,86 @@ class _NewProductScreenState extends State<NewProductScreen> {
     context.read<ProductBloc>().add(AddProductEvent(product));
   }
 
+  InputDecoration _decorationFor(String hintText, IconData icon) {
+    return InputDecoration(
+      hintText: hintText,
+      prefixIcon: Icon(icon),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(
           CoreStrings.stock,
           style: CoreFonts.title,
         ),
       ),
-      body: Center(
-        child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(
               controller: productController,
-              decoration: const InputDecoration(
-                hintText: CoreStrings.productName,
+              decoration: _decorationFor(
+                CoreStrings.productName,
+                Icons.inventory_2_outlined,
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
+            const SizedBox(height: 16),
+            TextField(
               keyboardType: TextInputType.number,
               controller: quantityController,
-              decoration: const InputDecoration(
-                hintText: CoreStrings.quantity,
+              decoration: _decorationFor(
+                CoreStrings.quantity,
+                Icons.numbers_outlined,
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
+            const SizedBox(height: 16),
+            TextField(
               keyboardType: TextInputType.number,
               controller: barcodeController,
-              decoration: const InputDecoration(
-                hintText: CoreStrings.enterBarcode,
+              decoration: _decorationFor(
+                CoreStrings.enterBarcode,
+                Icons.qr_code_2_outlined,
               ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () => addProduct(context),
-            child: const Text(
-              CoreStrings.addProduct,
-              style: CoreFonts.body,
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const BarCodeScreen(),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: () => addProduct(context),
+                icon: const Icon(Icons.add),
+                label: const Text(
+                  CoreStrings.addProduct,
+                  style: CoreFonts.body,
                 ),
-              );
-            },
-            child: const Text(
-              CoreStrings.barcode,
-              style: CoreFonts.body,
+              ),
             ),
-          ),
-        ]),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BarCodeScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.qr_code_scanner_outlined),
+                label: const Text(
+                  CoreStrings.barcode,
+                  style: CoreFonts.body,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

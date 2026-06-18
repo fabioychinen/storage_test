@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:storage_test/core/app_logger.dart';
 
 abstract class BarcodeEvent {}
 
@@ -10,6 +11,9 @@ class UpdateBarcodeEvent extends BarcodeEvent {
 
 class BarcodeBloc extends Bloc<BarcodeEvent, String> {
   BarcodeBloc() : super('') {
-    on<UpdateBarcodeEvent>((event, emit) => emit(event.barcode));
+    on<UpdateBarcodeEvent>((event, emit) {
+      appLogger.i('UpdateBarcodeEvent recebido: ${event.barcode}');
+      emit(event.barcode);
+    });
   }
 }

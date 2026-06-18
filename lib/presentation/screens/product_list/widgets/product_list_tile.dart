@@ -12,13 +12,27 @@ class ProductListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(product.name),
-      trailing: IconButton(
-        icon: const Icon(Icons.delete),
-        onPressed: () => _removeProduct(context),
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      elevation: 1,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      clipBehavior: Clip.antiAlias,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        leading: CircleAvatar(
+          backgroundColor: colorScheme.secondaryContainer,
+          foregroundColor: colorScheme.onSecondaryContainer,
+          child: const Icon(Icons.inventory_2_outlined),
+        ),
+        title: Text(product.name),
+        trailing: IconButton(
+          icon: Icon(Icons.delete_outline, color: colorScheme.error),
+          onPressed: () => _removeProduct(context),
+        ),
+        onTap: () => _openDetails(context),
       ),
-      onTap: () => _openDetails(context),
     );
   }
 

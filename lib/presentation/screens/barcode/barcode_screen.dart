@@ -1,37 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:storage_test/presentation/blocs/barcode/barcode_bloc.dart';
-import 'package:storage_test/core/core_assets.dart';
 import 'package:storage_test/core/core_fonts.dart';
 import 'package:storage_test/core/core_strings.dart';
 
 class BarCodeScreen extends StatelessWidget {
   const BarCodeScreen({super.key});
 
-  void readBARCode(BuildContext context) async {
-    String code = await FlutterBarcodeScanner.scanBarcode(
-      "#FFFFFF",
-      CoreStrings.cancel,
-      false,
-      ScanMode.BARCODE,
-    );
+  void _onDetect(BuildContext context, BarcodeCapture capture) {
+    if (capture.barcodes.isEmpty) return;
 
-    // ignore: use_build_context_synchronously
-    BlocProvider.of<BarcodeBloc>(context)
-        .add(UpdateBarcodeEvent(code != '-1' ? code : CoreStrings.invalid));
+    final code = capture.barcodes.first.rawValue;
+    if (code == null) return;
+
+    context.read<BarcodeBloc>().add(UpdateBarcodeEvent(code));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            BlocBuilder<BarcodeBloc, String>(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          CoreStrings.barcode,
+          style: CoreFonts.title,
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: MobileScanner(
+              onDetect: (capture) => _onDetect(context, capture),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: BlocBuilder<BarcodeBloc, String>(
               builder: (context, barcode) {
                 return Text(
                   CoreStrings.barcodeOf(barcode),
@@ -39,17 +44,8 @@ class BarCodeScreen extends StatelessWidget {
                 );
               },
             ),
-            const Divider(),
-            ElevatedButton.icon(
-              onPressed: () => readBARCode(context),
-              icon: Image.asset(CoreAssets.barcode),
-              label: const Text(
-                CoreStrings.scan,
-                style: CoreFonts.body,
-              ),
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -12,9 +12,19 @@ class CoreStrings {
   static const String productList = 'Lista de Produtos';
   static const String addProducts = 'Adicionar produtos';
   static const String removeProducts = 'Remover produtos';
-  static const String cancel = 'Cancelar';
-  static const String invalid = 'Inválido';
-  static const String scan = 'Escanear';
+  static const String emptyProductList = 'Nenhum produto cadastrado';
+
+  static const String loginTitle = 'Login';
+  static const String username = 'Usuário';
+  static const String password = 'Senha';
+  static const String confirmPassword = 'Confirmar senha';
+  static const String login = 'Entrar';
+  static const String register = 'Cadastrar';
+  static const String createAccount = 'Criar conta';
+  static const String alreadyHaveAccount = 'Já tenho uma conta';
+  static const String logout = 'Sair';
+  static const String fillAllFields = 'Preencha todos os campos';
+  static const String passwordMismatch = 'As senhas não coincidem';
 
   static String nameOf(String name) => 'Nome: $name';
   static String quantityOf(int? quantity) => 'Quantidade: $quantity';

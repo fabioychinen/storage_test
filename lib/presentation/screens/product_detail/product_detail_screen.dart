@@ -15,6 +15,7 @@ class ProductDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(
           CoreStrings.productDetails,
           style: CoreFonts.title,
@@ -22,18 +23,35 @@ class ProductDetailScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              CoreStrings.nameOf(product.name),
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text(CoreStrings.quantityOf(product.quantity)),
-            const SizedBox(height: 10),
-            Text(CoreStrings.barcodeOf(product.barcode)),
-          ],
+        child: Card(
+          elevation: 1,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.inventory_2_outlined),
+                title: Text(
+                  CoreStrings.nameOf(product.name),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.numbers_outlined),
+                title: Text(CoreStrings.quantityOf(product.quantity)),
+              ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.qr_code_2_outlined),
+                title: Text(CoreStrings.barcodeOf(product.barcode)),
+              ),
+            ],
+          ),
         ),
       ),
     );
