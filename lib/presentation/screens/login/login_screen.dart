@@ -14,25 +14,27 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _companyCodeController = TextEditingController();
   bool _isRegisterMode = false;
   bool _obscurePassword = true;
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _companyCodeController.dispose();
     super.dispose();
   }
 
   void _submit() {
-    final username = _usernameController.text.trim();
+    final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (username.isEmpty || password.isEmpty) {
+    if (email.isEmpty || password.isEmpty) {
       _showError(CoreStrings.fillAllFields);
       return;
     }
@@ -43,12 +45,17 @@ class _LoginScreenState extends State<LoginScreen> {
         _showError(CoreStrings.passwordMismatch);
         return;
       }
+      final companyCode = _companyCodeController.text.trim();
       context.read<AuthBloc>().add(
-            RegisterEvent(username: username, password: password),
+            RegisterEvent(
+              email: email,
+              password: password,
+              companyCode: companyCode.isEmpty ? null : companyCode,
+            ),
           );
     } else {
       context.read<AuthBloc>().add(
-            LoginEvent(username: username, password: password),
+            LoginEvent(email: email, password: password),
           );
     }
   }
@@ -62,9 +69,10 @@ class _LoginScreenState extends State<LoginScreen> {
   void _toggleMode() {
     setState(() {
       _isRegisterMode = !_isRegisterMode;
-      _usernameController.clear();
+      _emailController.clear();
       _passwordController.clear();
       _confirmPasswordController.clear();
+      _companyCodeController.clear();
     });
   }
 
@@ -97,12 +105,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 32),
                 TextField(
-                  controller: _usernameController,
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
-                    labelText: CoreStrings.username,
+                    labelText: CoreStrings.email,
                     border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.person),
+                    prefixIcon: Icon(Icons.email_outlined),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -131,12 +140,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextField(
                     controller: _confirmPasswordController,
                     obscureText: _obscurePassword,
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (_) => _submit(),
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       labelText: CoreStrings.confirmPassword,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock_outline),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: _companyCodeController,
+                    textCapitalization: TextCapitalization.characters,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => _submit(),
+                    decoration: const InputDecoration(
+                      labelText: CoreStrings.companyCode,
+                      hintText: CoreStrings.companyCodeHint,
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.business_outlined),
                     ),
                   ),
                 ],

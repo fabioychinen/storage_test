@@ -16,6 +16,7 @@ class CoreStrings {
 
   static const String loginTitle = 'Login';
   static const String username = 'Usuário';
+  static const String email = 'E-mail';
   static const String password = 'Senha';
   static const String confirmPassword = 'Confirmar senha';
   static const String login = 'Entrar';
@@ -23,6 +24,9 @@ class CoreStrings {
   static const String createAccount = 'Criar conta';
   static const String alreadyHaveAccount = 'Já tenho uma conta';
   static const String logout = 'Sair';
+  static const String darkTheme = 'Tema escuro';
+  static const String companyCode = 'Código da empresa';
+  static const String companyCodeHint = 'Deixe em branco para criar nova empresa';
   static const String fillAllFields = 'Preencha todos os campos';
   static const String passwordMismatch = 'As senhas não coincidem';
 

@@ -22,26 +22,41 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<LoadProductEvent>(
       (event, emit) async {
         appLogger.i('LoadProductEvent recebido');
-        final products = await _loadProducts();
-        emit(ProductSuccessState(products: products));
+        try {
+          final products = await _loadProducts();
+          emit(ProductSuccessState(products: products));
+        } catch (e) {
+          appLogger.e('Erro ao carregar produtos', error: e);
+          emit(ProductErrorState(message: e.toString()));
+        }
       },
     );
 
     on<AddProductEvent>(
       (event, emit) async {
         appLogger.i('AddProductEvent recebido: ${event.product.name}');
-        await _addProduct(event.product);
-        final products = await _loadProducts();
-        emit(ProductSuccessState(products: products));
+        try {
+          await _addProduct(event.product);
+          final products = await _loadProducts();
+          emit(ProductSuccessState(products: products));
+        } catch (e) {
+          appLogger.e('Erro ao adicionar produto', error: e);
+          emit(ProductErrorState(message: e.toString()));
+        }
       },
     );
 
     on<RemoveProductEvent>(
       (event, emit) async {
         appLogger.i('RemoveProductEvent recebido: id=${event.productId}');
-        await _removeProduct(event.productId);
-        final products = await _loadProducts();
-        emit(ProductSuccessState(products: products));
+        try {
+          await _removeProduct(event.productId);
+          final products = await _loadProducts();
+          emit(ProductSuccessState(products: products));
+        } catch (e) {
+          appLogger.e('Erro ao remover produto', error: e);
+          emit(ProductErrorState(message: e.toString()));
+        }
       },
     );
   }

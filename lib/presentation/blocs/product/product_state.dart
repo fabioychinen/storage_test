@@ -16,3 +16,8 @@ class ProductSuccessState extends ProductState {
   ProductSuccessState({required List<Product> products})
       : super(products: products);
 }
+
+class ProductErrorState extends ProductState {
+  final String message;
+  ProductErrorState({required this.message}) : super(products: []);
+}

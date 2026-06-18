@@ -6,7 +6,7 @@ class Register {
 
   Register(this._repository);
 
-  Future<User> call(String username, String password) {
-    return _repository.register(username, password);
+  Future<User> call(String email, String password, {String? companyCode}) {
+    return _repository.register(email, password, companyCode: companyCode);
   }
 }

@@ -1,24 +1,13 @@
 import 'package:storage_test/domain/entities/user.dart';
 
 class UserModel extends User {
-  UserModel({
-    super.id,
-    required super.username,
-    required super.password,
-  });
+  UserModel({required super.id, required super.email, super.companyCode});
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['id'] as int?,
-      username: map['username'] as String,
-      password: map['password'] as String,
+      id: map['id'] as String,
+      email: map['email'] as String,
+      companyCode: map['company_code'] as String?,
     );
-  }
-
-  Map<String, dynamic> toMapWithoutId() {
-    return {
-      'username': username,
-      'password': password,
-    };
   }
 }

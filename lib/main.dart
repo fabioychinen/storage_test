@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 import 'package:storage_test/core/supabase_config.dart';
-import 'package:storage_test/data/datasources/auth_local_data_source.dart';
+import 'package:storage_test/data/datasources/auth_supabase_data_source.dart';
 import 'package:storage_test/data/datasources/product_supabase_data_source.dart';
 import 'package:storage_test/data/repositories/auth_repository_impl.dart';
 import 'package:storage_test/data/repositories/product_repository_impl.dart';
@@ -18,6 +18,7 @@ import 'package:storage_test/presentation/blocs/auth/auth_bloc.dart';
 import 'package:storage_test/presentation/blocs/auth/auth_state.dart';
 import 'package:storage_test/presentation/blocs/barcode/barcode_bloc.dart';
 import 'package:storage_test/presentation/blocs/product/product_bloc.dart';
+import 'package:storage_test/presentation/blocs/theme/theme_cubit.dart';
 import 'package:storage_test/presentation/routes/app_routes.dart';
 import 'package:storage_test/presentation/screens/barcode/barcode_screen.dart';
 import 'package:storage_test/presentation/screens/home/home_screen.dart';
@@ -34,8 +35,8 @@ void main() async {
     publishableKey: SupabaseConfig.publishableKey,
   );
 
-  final authLocalDataSource = AuthLocalDataSource();
-  final authRepository = AuthRepositoryImpl(authLocalDataSource);
+  final authDataSource = AuthSupabaseDataSource();
+  final authRepository = AuthRepositoryImpl(authDataSource);
 
   final productDataSource = ProductSupabaseDataSource();
   final productRepository = ProductRepositoryImpl(productDataSource);
@@ -61,6 +62,9 @@ void main() async {
         BlocProvider(
           create: (context) => BarcodeBloc(),
         ),
+        BlocProvider(
+          create: (context) => ThemeCubit(),
+        ),
       ],
       child: const WarehouseApp(),
     ),
@@ -72,9 +76,10 @@ class WarehouseApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) => MaterialApp(
       title: 'Estoque',
-      themeMode: ThemeMode.system,
+      themeMode: themeMode,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
@@ -108,6 +113,7 @@ class WarehouseApp extends StatelessWidget {
           return ProductDetailScreen(product: product);
         }
       },
+      ),
     );
   }
 }

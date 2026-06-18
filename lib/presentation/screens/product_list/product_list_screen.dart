@@ -38,6 +38,25 @@ class _ProductListScreenState extends State<ProductListScreen> {
             }
             return ProductListView(products: state.products);
           }
+          if (state is ProductErrorState) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.cloud_off, size: 56),
+                  const SizedBox(height: 12),
+                  const Text('Erro ao carregar produtos'),
+                  const SizedBox(height: 8),
+                  TextButton(
+                    onPressed: () => context
+                        .read<ProductBloc>()
+                        .add(LoadProductEvent()),
+                    child: const Text('Tentar novamente'),
+                  ),
+                ],
+              ),
+            );
+          }
           return const Center(child: CircularProgressIndicator());
         },
       ),
