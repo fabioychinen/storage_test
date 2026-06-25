@@ -45,13 +45,35 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<void> removeProduct(int id) async {
+  Future<void> increaseProductQuantity(int id, int amount) async {
+    try {
+      await dataSource.increaseProductQuantity(id, amount);
+      appLogger.d('Quantidade aumentada: id=$id, amount=$amount');
+    } catch (error, stackTrace) {
+      appLogger.e('Erro ao aumentar quantidade id=$id', error: error, stackTrace: stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteProduct(int id) async {
     try {
       await dataSource.deleteProduct(id);
-      appLogger.d('Produto removido do Supabase: id=$id');
+      appLogger.d('Produto removido: id=$id');
+    } catch (error, stackTrace) {
+      appLogger.e('Erro ao remover produto id=$id', error: error, stackTrace: stackTrace);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> collectProduct(int id, int amount) async {
+    try {
+      await dataSource.collectProduct(id, amount);
+      appLogger.d('Coleta realizada: id=$id, amount=$amount');
     } catch (error, stackTrace) {
       appLogger.e(
-        'Erro ao remover produto id=$id',
+        'Erro ao coletar produto id=$id',
         error: error,
         stackTrace: stackTrace,
       );

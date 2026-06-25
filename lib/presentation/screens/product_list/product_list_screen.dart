@@ -6,6 +6,7 @@ import 'package:storage_test/presentation/blocs/product/product_bloc.dart';
 import 'package:storage_test/presentation/blocs/product/product_events.dart';
 import 'package:storage_test/presentation/blocs/product/product_state.dart';
 import 'package:storage_test/presentation/screens/product_list/widgets/product_list_view.dart';
+import 'package:storage_test/presentation/widgets/empty_product_list.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
@@ -25,17 +26,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          CoreStrings.productList,
-          style: CoreFonts.title,
-        ),
+        title: const Text(CoreStrings.productList, style: CoreFonts.title),
       ),
       body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
           if (state is ProductSuccessState) {
-            if (state.products.isEmpty) {
-              return const _EmptyProductList();
-            }
+            if (state.products.isEmpty) return const EmptyProductList();
             return ProductListView(products: state.products);
           }
           if (state is ProductErrorState) {
@@ -45,13 +41,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 children: [
                   const Icon(Icons.cloud_off, size: 56),
                   const SizedBox(height: 12),
-                  const Text('Erro ao carregar produtos'),
+                  const Text(CoreStrings.loadProductsError),
                   const SizedBox(height: 8),
                   TextButton(
-                    onPressed: () => context
-                        .read<ProductBloc>()
-                        .add(LoadProductEvent()),
-                    child: const Text('Tentar novamente'),
+                    onPressed: () => context.read<ProductBloc>().add(LoadProductEvent()),
+                    child: const Text(CoreStrings.tryAgain),
                   ),
                 ],
               ),
@@ -59,33 +53,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
           }
           return const Center(child: CircularProgressIndicator());
         },
-      ),
-    );
-  }
-}
-
-class _EmptyProductList extends StatelessWidget {
-  const _EmptyProductList();
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.inventory_2_outlined,
-            size: 56,
-            color: colorScheme.outline,
-          ),
-          const SizedBox(height: 12),
-          const Text(
-            CoreStrings.emptyProductList,
-            style: CoreFonts.body,
-          ),
-        ],
       ),
     );
   }

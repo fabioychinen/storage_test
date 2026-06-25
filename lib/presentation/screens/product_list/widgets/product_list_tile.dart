@@ -1,8 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:storage_test/domain/entities/product.dart';
-import 'package:storage_test/presentation/blocs/product/product_bloc.dart';
-import 'package:storage_test/presentation/blocs/product/product_events.dart';
 import 'package:storage_test/presentation/screens/product_detail/product_detail_screen.dart';
 
 class ProductListTile extends StatelessWidget {
@@ -27,26 +24,30 @@ class ProductListTile extends StatelessWidget {
           child: const Icon(Icons.inventory_2_outlined),
         ),
         title: Text(product.name),
-        trailing: IconButton(
-          icon: Icon(Icons.delete_outline, color: colorScheme.error),
-          onPressed: () => _removeProduct(context),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              '${product.quantity ?? 0}',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.primary,
+              ),
+            ),
+            Text(
+              'un.',
+              style: TextStyle(fontSize: 11, color: colorScheme.outline),
+            ),
+          ],
         ),
-        onTap: () => _openDetails(context),
-      ),
-    );
-  }
-
-  void _removeProduct(BuildContext context) {
-    context
-        .read<ProductBloc>()
-        .add(RemoveProductEvent(productId: product.id!));
-  }
-
-  void _openDetails(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ProductDetailScreen(product: product),
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ProductDetailScreen(product: product),
+          ),
+        ),
       ),
     );
   }

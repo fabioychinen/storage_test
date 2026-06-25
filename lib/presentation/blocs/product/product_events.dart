@@ -10,10 +10,22 @@ class AddProductEvent extends ProductEvent {
   AddProductEvent(this.product);
 }
 
-class RemoveProductEvent extends ProductEvent {
+class CollectProductEvent extends ProductEvent {
+  final int productId;
+  final int quantity;
+
+  CollectProductEvent({required this.productId, required this.quantity});
+}
+
+class UpdateStockEvent extends ProductEvent {
+  final int productId;
+  final int quantity;
+
+  UpdateStockEvent({required this.productId, required this.quantity});
+}
+
+class DeleteProductEvent extends ProductEvent {
   final int productId;
 
-  RemoveProductEvent({
-    required this.productId,
-  });
+  DeleteProductEvent({required this.productId});
 }

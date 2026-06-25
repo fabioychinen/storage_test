@@ -43,6 +43,7 @@ flutter:
      - assets/images/delete.png
      - assets/images/box.png
      - assets/images/list.png
+     - assets/images/collect_list.png
   
   fonts:
     - family: RussoOne

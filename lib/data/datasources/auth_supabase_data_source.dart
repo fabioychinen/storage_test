@@ -12,8 +12,13 @@ class AuthSupabaseDataSource {
     );
     final user = response.user;
     if (user == null) return null;
-    final companyCode = await _fetchCompanyCode(user.id);
-    return {'id': user.id, 'email': user.email ?? email, 'company_code': companyCode};
+    final profile = await _fetchProfile(user.id);
+    return {
+      'id': user.id,
+      'email': user.email ?? email,
+      'company_code': profile?['company_code'],
+      'is_admin': profile?['is_admin'] ?? false,
+    };
   }
 
   Future<Map<String, dynamic>> signUp(
@@ -27,6 +32,7 @@ class AuthSupabaseDataSource {
 
     String companyId;
     String? resolvedCode;
+    final bool isAdmin;
 
     if (companyCode != null && companyCode.isNotEmpty) {
       final company = await _client
@@ -37,6 +43,7 @@ class AuthSupabaseDataSource {
       if (company == null) throw Exception('Código de empresa inválido');
       companyId = company['id'] as String;
       resolvedCode = company['code'] as String;
+      isAdmin = false;
     } else {
       resolvedCode = _generateCode();
       final company = await _client.from('companies').insert({
@@ -44,17 +51,20 @@ class AuthSupabaseDataSource {
         'code': resolvedCode,
       }).select('id').single();
       companyId = company['id'] as String;
+      isAdmin = true; // criador da empresa é admin
     }
 
     await _client.from('profiles').insert({
       'id': user.id,
       'company_id': companyId,
+      'is_admin': isAdmin,
     });
 
     return {
       'id': user.id,
       'email': user.email ?? email,
       'company_code': resolvedCode,
+      'is_admin': isAdmin,
     };
   }
 
@@ -65,18 +75,26 @@ class AuthSupabaseDataSource {
   Future<Map<String, dynamic>?> getCurrentUser() async {
     final user = _auth.currentUser;
     if (user == null) return null;
-    final companyCode = await _fetchCompanyCode(user.id);
-    return {'id': user.id, 'email': user.email ?? '', 'company_code': companyCode};
+    final profile = await _fetchProfile(user.id);
+    return {
+      'id': user.id,
+      'email': user.email ?? '',
+      'company_code': profile?['company_code'],
+      'is_admin': profile?['is_admin'] ?? false,
+    };
   }
 
-  Future<String?> _fetchCompanyCode(String userId) async {
+  Future<Map<String, dynamic>?> _fetchProfile(String userId) async {
     try {
       final result = await _client
           .from('profiles')
-          .select('companies(code)')
+          .select('is_admin, companies(code)')
           .eq('id', userId)
           .single();
-      return result['companies']?['code'] as String?;
+      return {
+        'is_admin': result['is_admin'] as bool? ?? false,
+        'company_code': result['companies']?['code'] as String?,
+      };
     } catch (_) {
       return null;
     }

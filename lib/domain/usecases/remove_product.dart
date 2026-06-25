@@ -1,9 +1,9 @@
 import 'package:storage_test/domain/repositories/product_repository.dart';
 
-class RemoveProduct {
+class CollectProduct {
   final ProductRepository repository;
 
-  RemoveProduct(this.repository);
+  CollectProduct(this.repository);
 
-  Future<void> call(int productId) => repository.removeProduct(productId);
+  Future<void> call(int productId, int amount) => repository.collectProduct(productId, amount);
 }

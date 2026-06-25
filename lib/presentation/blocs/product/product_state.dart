@@ -3,9 +3,7 @@ import 'package:storage_test/domain/entities/product.dart';
 abstract class ProductState {
   List<Product> products;
 
-  ProductState({
-    required this.products,
-  });
+  ProductState({required this.products});
 }
 
 class ProductInitialState extends ProductState {
@@ -19,5 +17,6 @@ class ProductSuccessState extends ProductState {
 
 class ProductErrorState extends ProductState {
   final String message;
+
   ProductErrorState({required this.message}) : super(products: []);
 }

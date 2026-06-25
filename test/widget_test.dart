@@ -1,88 +1,95 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:storage_test/core/core_strings.dart';
 import 'package:storage_test/domain/entities/product.dart';
-import 'package:storage_test/domain/repositories/product_repository.dart';
-import 'package:storage_test/domain/usecases/add_product.dart';
-import 'package:storage_test/domain/usecases/load_products.dart';
-import 'package:storage_test/domain/usecases/remove_product.dart';
-import 'package:storage_test/main.dart';
-import 'package:storage_test/presentation/blocs/barcode/barcode_bloc.dart';
-import 'package:storage_test/presentation/blocs/product/product_bloc.dart';
+import 'package:storage_test/presentation/screens/home/home_screen.dart';
+import 'package:storage_test/presentation/screens/product_list/product_list_screen.dart';
+import 'package:storage_test/presentation/screens/remove_product/remove_product_screen.dart';
+import 'package:storage_test/presentation/screens/delete_product/delete_product_screen.dart';
 
-class InMemoryProductRepository implements ProductRepository {
-  final List<Product> _products = [];
-  int _nextId = 1;
-
-  @override
-  Future<List<Product>> loadProducts() async => List.of(_products);
-
-  @override
-  Future<Product> addProduct(Product product) async {
-    final added = Product(
-      id: _nextId++,
-      name: product.name,
-      quantity: product.quantity,
-      barcode: product.barcode,
-    );
-    _products.add(added);
-    return added;
-  }
-
-  @override
-  Future<void> removeProduct(int id) async {
-    _products.removeWhere((product) => product.id == id);
-  }
-}
+import 'helpers/app_wrapper.dart';
 
 void main() {
-  testWidgets(
-    'add product -> appears on product list -> delete removes it',
-    (WidgetTester tester) async {
-      final repository = InMemoryProductRepository();
+  testWidgets('adicionar produto → aparece na lista de produtos',
+      (tester) async {
+    await tester.pumpWidget(buildTestApp(home: const HomeScreen()));
+    await tester.pumpAndSettle();
 
-      await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (_) => ProductBloc(
-                loadProducts: LoadProducts(repository),
-                addProduct: AddProduct(repository),
-                removeProduct: RemoveProduct(repository),
-              ),
-            ),
-            BlocProvider(create: (_) => BarcodeBloc()),
-          ],
-          child: const WarehouseApp(),
-        ),
-      );
+    await tester.tap(find.text(CoreStrings.addNewProducts));
+    await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Adicionar produtos'));
-      await tester.pumpAndSettle();
+    await tester.enterText(
+        find.widgetWithText(TextField, CoreStrings.productName), 'Parafuso');
+    await tester.enterText(
+        find.widgetWithText(TextField, CoreStrings.quantity), '10');
+    await tester.enterText(
+        find.widgetWithText(TextField, CoreStrings.enterBarcode), '12345');
 
-      await tester.enterText(
-          find.widgetWithText(TextField, 'Nome do produto'), 'Parafuso');
-      await tester.enterText(
-          find.widgetWithText(TextField, 'Quantidade'), '10');
-      await tester.enterText(
-          find.widgetWithText(TextField, 'Digite o código de barras'),
-          '12345');
+    await tester.tap(find.text(CoreStrings.addProduct));
+    await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Adicionar produto'));
-      await tester.pumpAndSettle();
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(BackButton));
-      await tester.pumpAndSettle();
+    await tester.tap(find.text(CoreStrings.productList));
+    await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Lista de Produtos'));
-      await tester.pumpAndSettle();
+    expect(find.text('Parafuso'), findsOneWidget);
+  });
 
-      expect(find.text('Parafuso'), findsOneWidget);
+  testWidgets('remover produto → some da lista', (tester) async {
+    await tester.pumpWidget(
+      buildTestApp(
+        home: const DeleteProductScreen(),
+        products: [Product(id: 1, name: 'Porca', quantity: 5, barcode: 99999)],
+      ),
+    );
+    await tester.pumpAndSettle();
 
-      await tester.tap(find.byIcon(Icons.delete_outline));
-      await tester.pumpAndSettle();
+    expect(find.text('Porca'), findsOneWidget);
 
-      expect(find.text('Parafuso'), findsNothing);
-    },
-  );
+    await tester.tap(find.byIcon(Icons.delete_outline));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text(CoreStrings.delete));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Porca'), findsNothing);
+  });
+
+  testWidgets('coletar produto → quantidade reduz', (tester) async {
+    await tester.pumpWidget(
+      buildTestApp(
+        home: const CollectProductScreen(),
+        products: [Product(id: 1, name: 'Arruela', quantity: 20, barcode: 77777)],
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('20 un.'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.remove_circle_outline));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text(CoreStrings.remove));
+    await tester.pumpAndSettle();
+
+    expect(find.text('19 un.'), findsOneWidget);
+  });
+
+  testWidgets('lista de produtos exibe todos os itens carregados',
+      (tester) async {
+    final products = [
+      Product(id: 1, name: 'Item A', quantity: 10, barcode: 111),
+      Product(id: 2, name: 'Item B', quantity: 5, barcode: 222),
+    ];
+
+    await tester.pumpWidget(
+      buildTestApp(home: const ProductListScreen(), products: products),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Item A'), findsOneWidget);
+    expect(find.text('Item B'), findsOneWidget);
+  });
 }
