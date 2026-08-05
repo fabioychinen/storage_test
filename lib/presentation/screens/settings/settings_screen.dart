@@ -38,7 +38,11 @@ class SettingsScreen extends StatelessWidget {
             title: const Text(CoreStrings.logout),
             textColor: Theme.of(context).colorScheme.error,
             iconColor: Theme.of(context).colorScheme.error,
-            onTap: () => context.read<AuthBloc>().add(LogoutEvent()),
+            onTap: () {
+              final authBloc = context.read<AuthBloc>();
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              authBloc.add(LogoutEvent());
+            },
           ),
         ],
       ),

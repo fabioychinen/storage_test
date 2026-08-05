@@ -13,11 +13,13 @@ class RegisterEvent extends AuthEvent {
   final String email;
   final String password;
   final String? companyCode;
+  final String? companyName;
 
   RegisterEvent({
     required this.email,
     required this.password,
     this.companyCode,
+    this.companyName,
   });
 }
 

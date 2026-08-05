@@ -30,6 +30,7 @@ final kTestUser = User(
   id: 'test-uid',
   email: 'dev@empresa.com',
   companyCode: 'ABCD1234',
+  isAdmin: true,
 );
 
 const kGoldenSize = Size(390, 844);

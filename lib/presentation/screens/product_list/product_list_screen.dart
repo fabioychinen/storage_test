@@ -16,10 +16,19 @@ class ProductListScreen extends StatefulWidget {
 }
 
 class _ProductListScreenState extends State<ProductListScreen> {
+  final _searchController = TextEditingController();
+  String _searchQuery = '';
+
   @override
   void initState() {
     super.initState();
     context.read<ProductBloc>().add(LoadProductEvent());
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -28,31 +37,70 @@ class _ProductListScreenState extends State<ProductListScreen> {
       appBar: AppBar(
         title: const Text(CoreStrings.productList, style: CoreFonts.title),
       ),
-      body: BlocBuilder<ProductBloc, ProductState>(
-        builder: (context, state) {
-          if (state is ProductSuccessState) {
-            if (state.products.isEmpty) return const EmptyProductList();
-            return ProductListView(products: state.products);
-          }
-          if (state is ProductErrorState) {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.cloud_off, size: 56),
-                  const SizedBox(height: 12),
-                  const Text(CoreStrings.loadProductsError),
-                  const SizedBox(height: 8),
-                  TextButton(
-                    onPressed: () => context.read<ProductBloc>().add(LoadProductEvent()),
-                    child: const Text(CoreStrings.tryAgain),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+            child: SearchBar(
+              controller: _searchController,
+              hintText: CoreStrings.searchProducts,
+              leading: const Icon(Icons.search),
+              trailing: [
+                if (_searchQuery.isNotEmpty)
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      _searchController.clear();
+                      setState(() => _searchQuery = '');
+                    },
                   ),
-                ],
-              ),
-            );
-          }
-          return const Center(child: CircularProgressIndicator());
-        },
+              ],
+              onChanged: (value) => setState(() => _searchQuery = value),
+              elevation: const WidgetStatePropertyAll(1),
+            ),
+          ),
+          Expanded(
+            child: BlocBuilder<ProductBloc, ProductState>(
+              builder: (context, state) {
+                if (state is ProductSuccessState) {
+                  final filtered = _searchQuery.isEmpty
+                      ? state.products
+                      : state.products
+                          .where((p) => p.name
+                              .toLowerCase()
+                              .contains(_searchQuery.toLowerCase()))
+                          .toList();
+
+                  if (filtered.isEmpty) return const EmptyProductList();
+                  return RefreshIndicator(
+                    onRefresh: () async =>
+                        context.read<ProductBloc>().add(LoadProductEvent()),
+                    child: ProductListView(products: filtered),
+                  );
+                }
+                if (state is ProductErrorState) {
+                  return Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.cloud_off, size: 56),
+                        const SizedBox(height: 12),
+                        const Text(CoreStrings.loadProductsError),
+                        const SizedBox(height: 8),
+                        TextButton(
+                          onPressed: () =>
+                              context.read<ProductBloc>().add(LoadProductEvent()),
+                          child: const Text(CoreStrings.tryAgain),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return const Center(child: CircularProgressIndicator());
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

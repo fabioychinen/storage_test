@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storage_test/core/core_fonts.dart';
 import 'package:storage_test/core/core_strings.dart';
 import 'package:storage_test/domain/entities/product.dart';
+import 'package:storage_test/presentation/blocs/barcode/barcode_bloc.dart';
 import 'package:storage_test/presentation/blocs/product/product_bloc.dart';
 import 'package:storage_test/presentation/blocs/product/product_events.dart';
 import 'package:storage_test/presentation/blocs/product/product_state.dart';
@@ -74,18 +75,28 @@ class _NewProductScreenState extends State<NewProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ProductBloc, ProductState>(
-      listener: (context, state) {
-        if (!_isAdding) return;
-        setState(() => _isAdding = false);
-
-        if (state is ProductSuccessState) {
-          _clearFields();
-          _showSnackBar(CoreStrings.productAddedSuccess, isError: false);
-        } else if (state is ProductErrorState) {
-          _showSnackBar(state.message, isError: true);
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<ProductBloc, ProductState>(
+          listener: (context, state) {
+            if (!_isAdding) return;
+            setState(() => _isAdding = false);
+            if (state is ProductSuccessState) {
+              _clearFields();
+              _showSnackBar(CoreStrings.productAddedSuccess, isError: false);
+            } else if (state is ProductErrorState) {
+              _showSnackBar(state.message, isError: true);
+            }
+          },
+        ),
+        BlocListener<BarcodeBloc, String>(
+          listener: (context, barcode) {
+            if (barcode.isNotEmpty) {
+              _barcodeController.text = barcode;
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,

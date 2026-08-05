@@ -31,7 +31,8 @@ void main() {
     await tester.tap(find.byType(BackButton));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text(CoreStrings.productList));
+    // Navega para a lista de produtos pelo NavigationBar (aba "Produtos")
+    await tester.tap(find.text('Produtos'));
     await tester.pumpAndSettle();
 
     expect(find.text('Parafuso'), findsOneWidget);

@@ -17,15 +17,19 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _companyNameController = TextEditingController();
   final _companyCodeController = TextEditingController();
   bool _isRegisterMode = false;
+  bool _isCreatingCompany = true;
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _companyNameController.dispose();
     _companyCodeController.dispose();
     super.dispose();
   }
@@ -45,18 +49,32 @@ class _LoginScreenState extends State<LoginScreen> {
         _showError(CoreStrings.passwordMismatch);
         return;
       }
-      final companyCode = _companyCodeController.text.trim();
-      context.read<AuthBloc>().add(
-            RegisterEvent(
+
+      if (_isCreatingCompany) {
+        final companyName = _companyNameController.text.trim();
+        if (companyName.isEmpty) {
+          _showError('Informe o nome da empresa');
+          return;
+        }
+        context.read<AuthBloc>().add(RegisterEvent(
               email: email,
               password: password,
-              companyCode: companyCode.isEmpty ? null : companyCode,
-            ),
-          );
+              companyName: companyName,
+            ));
+      } else {
+        final companyCode = _companyCodeController.text.trim();
+        if (companyCode.isEmpty) {
+          _showError('Informe o código da empresa');
+          return;
+        }
+        context.read<AuthBloc>().add(RegisterEvent(
+              email: email,
+              password: password,
+              companyCode: companyCode,
+            ));
+      }
     } else {
-      context.read<AuthBloc>().add(
-            LoginEvent(email: email, password: password),
-          );
+      context.read<AuthBloc>().add(LoginEvent(email: email, password: password));
     }
   }
 
@@ -69,9 +87,11 @@ class _LoginScreenState extends State<LoginScreen> {
   void _toggleMode() {
     setState(() {
       _isRegisterMode = !_isRegisterMode;
+      _isCreatingCompany = true;
       _emailController.clear();
       _passwordController.clear();
       _confirmPasswordController.clear();
+      _companyNameController.clear();
       _companyCodeController.clear();
     });
   }
@@ -135,32 +155,88 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                if (_isRegisterMode) ...[
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _confirmPasswordController,
-                    obscureText: _obscurePassword,
-                    textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      labelText: CoreStrings.confirmPassword,
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.lock_outline),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _companyCodeController,
-                    textCapitalization: TextCapitalization.characters,
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (_) => _submit(),
-                    decoration: const InputDecoration(
-                      labelText: CoreStrings.companyCode,
-                      hintText: CoreStrings.companyCodeHint,
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.business_outlined),
-                    ),
-                  ),
-                ],
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeInOut,
+                  child: _isRegisterMode
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const SizedBox(height: 16),
+                            TextField(
+                              controller: _confirmPasswordController,
+                              obscureText: _obscureConfirmPassword,
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                labelText: CoreStrings.confirmPassword,
+                                border: const OutlineInputBorder(),
+                                prefixIcon: const Icon(Icons.lock_outline),
+                                suffixIcon: IconButton(
+                                  icon: Icon(_obscureConfirmPassword
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
+                                  onPressed: () => setState(() =>
+                                      _obscureConfirmPassword =
+                                          !_obscureConfirmPassword),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            SegmentedButton<bool>(
+                              segments: const [
+                                ButtonSegment(
+                                  value: true,
+                                  label: Text(CoreStrings.createNewCompany),
+                                  icon: Icon(Icons.add_business_outlined),
+                                ),
+                                ButtonSegment(
+                                  value: false,
+                                  label: Text(CoreStrings.joinCompany),
+                                  icon: Icon(Icons.business_outlined),
+                                ),
+                              ],
+                              selected: {_isCreatingCompany},
+                              onSelectionChanged: (s) => setState(() {
+                                _isCreatingCompany = s.first;
+                                _companyNameController.clear();
+                                _companyCodeController.clear();
+                              }),
+                            ),
+                            const SizedBox(height: 16),
+                            AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 200),
+                              child: _isCreatingCompany
+                                  ? TextField(
+                                      key: const ValueKey('name'),
+                                      controller: _companyNameController,
+                                      textInputAction: TextInputAction.done,
+                                      onSubmitted: (_) => _submit(),
+                                      decoration: const InputDecoration(
+                                        labelText: CoreStrings.companyName,
+                                        border: OutlineInputBorder(),
+                                        prefixIcon:
+                                            Icon(Icons.business_outlined),
+                                      ),
+                                    )
+                                  : TextField(
+                                      key: const ValueKey('code'),
+                                      controller: _companyCodeController,
+                                      textCapitalization:
+                                          TextCapitalization.characters,
+                                      textInputAction: TextInputAction.done,
+                                      onSubmitted: (_) => _submit(),
+                                      decoration: const InputDecoration(
+                                        labelText: CoreStrings.companyCode,
+                                        border: OutlineInputBorder(),
+                                        prefixIcon:
+                                            Icon(Icons.vpn_key_outlined),
+                                      ),
+                                    ),
+                            ),
+                          ],
+                        )
+                      : const SizedBox.shrink(),
+                ),
                 const SizedBox(height: 24),
                 BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {

@@ -57,6 +57,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           event.email,
           event.password,
           companyCode: event.companyCode,
+          companyName: event.companyName,
         );
         emit(AuthAuthenticatedState(user: user));
       } catch (e) {
@@ -68,8 +69,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<LogoutEvent>((event, emit) async {
+      if (state is AuthUnauthenticatedState || state is AuthLoadingState) return;
+      emit(AuthLoadingState());
       appLogger.i('LogoutEvent');
-      await _logout();
+      try {
+        await _logout();
+      } catch (e) {
+        appLogger.e('Erro ao fazer logout', error: e);
+      }
       emit(AuthUnauthenticatedState());
     });
 

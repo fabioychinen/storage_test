@@ -35,8 +35,10 @@ class CoreStrings {
   static const String settings = 'Configurações';
   static const String appearance = 'Aparência';
   static const String account = 'Conta';
+  static const String companyName = 'Nome da empresa';
   static const String companyCode = 'Código da empresa';
-  static const String companyCodeHint = 'Deixe em branco para criar nova empresa';
+  static const String createNewCompany = 'Criar empresa';
+  static const String joinCompany = 'Entrar em empresa';
   static const String fillAllFields = 'Preencha todos os campos';
   static const String passwordMismatch = 'As senhas não coincidem';
 
@@ -63,4 +65,11 @@ class CoreStrings {
   static String quantityOf(int? quantity) => 'Quantidade: $quantity';
   static String barcodeOf(Object? barcode) => 'Código de Barras: $barcode';
   static String confirmRemovalOf(String name) => 'Deseja remover "$name"?';
+
+  static const String searchProducts = 'Buscar produto';
+  static const String totalProducts = 'Produtos cadastrados';
+  static const String welcomeTitle = 'Bem-vindo!';
+  static const String quickEntry = 'Entrada';
+  static const String quickExit = 'Saída';
+  static const String stockEntrySuccess = 'Entrada registrada com sucesso!';
 }

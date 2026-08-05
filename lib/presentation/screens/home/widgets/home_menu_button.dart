@@ -5,17 +5,20 @@ class HomeMenuButton extends StatelessWidget {
   final String label;
   final String iconAsset;
   final VoidCallback onPressed;
+  final Color? accentColor;
 
   const HomeMenuButton({
     super.key,
     required this.label,
     required this.iconAsset,
     required this.onPressed,
+    this.accentColor,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final color = accentColor ?? colorScheme.primary;
 
     return Card(
       elevation: 1,
@@ -27,12 +30,16 @@ class HomeMenuButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
           child: Row(
             children: [
-              Image.asset(
-                iconAsset,
-                width: 24,
-                height: 24,
-                color: colorScheme.onSurface,
-                colorBlendMode: BlendMode.srcIn,
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: color.withValues(alpha: 0.15),
+                child: Image.asset(
+                  iconAsset,
+                  width: 20,
+                  height: 20,
+                  color: color,
+                  colorBlendMode: BlendMode.srcIn,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(

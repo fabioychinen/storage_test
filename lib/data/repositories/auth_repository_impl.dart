@@ -24,11 +24,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<User> register(String email, String password,
-      {String? companyCode}) async {
+      {String? companyCode, String? companyName}) async {
     try {
       appLogger.i('Cadastro: $email');
       final map = await _dataSource.signUp(email, password,
-          companyCode: companyCode);
+          companyCode: companyCode, companyName: companyName);
       return UserModel.fromMap(map);
     } catch (e) {
       appLogger.e('Erro ao cadastrar usuário', error: e);

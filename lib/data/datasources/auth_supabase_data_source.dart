@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthSupabaseDataSource {
@@ -10,61 +9,51 @@ class AuthSupabaseDataSource {
       email: email,
       password: password,
     );
-    final user = response.user;
-    if (user == null) return null;
-    final profile = await _fetchProfile(user.id);
-    return {
-      'id': user.id,
-      'email': user.email ?? email,
-      'company_code': profile?['company_code'],
-      'is_admin': profile?['is_admin'] ?? false,
-    };
+    if (response.user == null) return null;
+    // Fetch profile via edge function now that session is established
+    final profileResponse = await _client.functions.invoke('auth-profile');
+    return profileResponse.data as Map<String, dynamic>?;
   }
 
   Future<Map<String, dynamic>> signUp(
     String email,
     String password, {
     String? companyCode,
+    String? companyName,
   }) async {
-    final response = await _auth.signUp(email: email, password: password);
-    final user = response.user;
-    if (user == null) throw Exception('Erro ao criar conta');
-
-    String companyId;
-    String? resolvedCode;
-    final bool isAdmin;
-
-    if (companyCode != null && companyCode.isNotEmpty) {
-      final company = await _client
-          .from('companies')
-          .select('id, code')
-          .eq('code', companyCode.toUpperCase())
-          .maybeSingle();
-      if (company == null) throw Exception('Código de empresa inválido');
-      companyId = company['id'] as String;
-      resolvedCode = company['code'] as String;
-      isAdmin = false;
-    } else {
-      resolvedCode = _generateCode();
-      final company = await _client.from('companies').insert({
-        'name': email.split('@').first,
-        'code': resolvedCode,
-      }).select('id').single();
-      companyId = company['id'] as String;
-      isAdmin = true; // criador da empresa é admin
+    // Edge function creates user, company, and profile atomically via admin client
+    try {
+      await _client.functions.invoke(
+        'auth-register',
+        body: {
+          'email': email,
+          'password': password,
+          if (companyCode != null && companyCode.isNotEmpty)
+            'companyCode': companyCode,
+          if (companyName != null && companyName.isNotEmpty)
+            'companyName': companyName,
+        },
+      );
+    } on FunctionException catch (e) {
+      throw _parseFunctionError(e);
     }
 
-    await _client.from('profiles').insert({
-      'id': user.id,
-      'company_id': companyId,
-      'is_admin': isAdmin,
-    });
+    // Establish local session after server-side user creation
+    final sessionResponse = await _auth.signInWithPassword(
+      email: email,
+      password: password,
+    );
+    if (sessionResponse.user == null) throw Exception('Erro ao iniciar sessão');
+
+    // Profile data is now in the session; fetch full profile
+    final profileResponse = await _client.functions.invoke('auth-profile');
+    final profile = profileResponse.data as Map<String, dynamic>? ?? {};
 
     return {
-      'id': user.id,
-      'email': user.email ?? email,
-      'company_code': resolvedCode,
-      'is_admin': isAdmin,
+      'id': sessionResponse.user!.id,
+      'email': sessionResponse.user!.email ?? email,
+      'company_code': profile['company_code'],
+      'is_admin': profile['is_admin'] ?? false,
     };
   }
 
@@ -73,36 +62,21 @@ class AuthSupabaseDataSource {
   }
 
   Future<Map<String, dynamic>?> getCurrentUser() async {
-    final user = _auth.currentUser;
-    if (user == null) return null;
-    final profile = await _fetchProfile(user.id);
-    return {
-      'id': user.id,
-      'email': user.email ?? '',
-      'company_code': profile?['company_code'],
-      'is_admin': profile?['is_admin'] ?? false,
-    };
-  }
-
-  Future<Map<String, dynamic>?> _fetchProfile(String userId) async {
+    if (_auth.currentUser == null) return null;
     try {
-      final result = await _client
-          .from('profiles')
-          .select('is_admin, companies(code)')
-          .eq('id', userId)
-          .single();
-      return {
-        'is_admin': result['is_admin'] as bool? ?? false,
-        'company_code': result['companies']?['code'] as String?,
-      };
-    } catch (_) {
+      final response = await _client.functions.invoke('auth-profile');
+      return response.data as Map<String, dynamic>?;
+    } on FunctionException {
       return null;
     }
   }
 
-  String _generateCode() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    final random = Random.secure();
-    return List.generate(8, (_) => chars[random.nextInt(chars.length)]).join();
+  Exception _parseFunctionError(FunctionException e) {
+    final details = e.details;
+    if (details is Map<String, dynamic>) {
+      final msg = details['error'];
+      if (msg is String) return Exception(msg);
+    }
+    return Exception(e.reasonPhrase ?? 'Erro desconhecido');
   }
 }

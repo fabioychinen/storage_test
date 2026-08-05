@@ -12,7 +12,6 @@ class CoreFonts {
   );
 
   static const TextStyle body = TextStyle(
-    fontFamily: russoOne,
     fontSize: 16,
     fontWeight: FontWeight.bold,
   );

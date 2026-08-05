@@ -14,6 +14,7 @@ import 'package:storage_test/presentation/screens/product_detail/product_detail_
 import 'package:storage_test/presentation/screens/product_list/product_list_screen.dart';
 import 'package:storage_test/presentation/screens/remove_product/remove_product_screen.dart';
 import 'package:storage_test/presentation/screens/settings/settings_screen.dart';
+import 'package:storage_test/presentation/screens/splash/splash_screen.dart';
 import 'package:storage_test/presentation/screens/update_stock/update_stock_screen.dart';
 
 class WarehouseApp extends StatelessWidget {
@@ -39,13 +40,21 @@ class WarehouseApp extends StatelessWidget {
         ),
         home: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            if (state is AuthAuthenticatedState) return const HomeScreen();
-            if (state is AuthInitialState || state is AuthLoadingState) {
-              return const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
+            final Widget screen;
+            if (state is AuthAuthenticatedState) {
+              screen = const HomeScreen();
+            } else if (state is AuthInitialState || state is AuthLoadingState) {
+              screen = const SplashScreen();
+            } else {
+              screen = const LoginScreen();
             }
-            return const LoginScreen();
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 400),
+              child: KeyedSubtree(
+                key: ValueKey(screen.runtimeType),
+                child: screen,
+              ),
+            );
           },
         ),
         routes: {
